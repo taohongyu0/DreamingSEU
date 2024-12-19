@@ -1,0 +1,287 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(238, 238, 238);
+}
+
+.container {
+    width: 50%;
+    margin: 20px auto auto auto;
+    padding: 20px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/*.post-item {*/
+/*    margin: 0 10px auto 10px;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*    padding: 15px 0;*/
+/*}*/
+
+/*.post-item:last-child {*/
+/*    border-bottom: none;*/
+/*}*/
+
+.post-item {
+    display: flex; /* 使用 flexbox 布局 */
+    align-items: center; /* 可选：垂直居中对齐子元素 */
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    margin:  0 10px 0 10px;
+}
+
+.post-item:last-child {
+    border-bottom: none;
+}
+
+.post-text-item {
+    flex: 1 1 auto;
+    width: 50%;
+    padding: 10px 0;
+}
+
+.post-title {
+    font-size: 1.5em;
+    margin: 0 0 10px;
+    color: #333;
+    text-decoration: none;
+    overflow-wrap: break-word; /* 推荐的属性 */
+    word-wrap: break-word;     /* 为了兼容旧浏览器 */
+    white-space: normal;       /* 确保文本不会在单词内被截断 */
+}
+
+.post-title:hover {
+    text-decoration: underline;
+}
+
+.post-summary {
+    color: #666;
+    font-size: 0.9em;
+}
+.additional-links {
+    text-align: center; /* 可选，用于将按钮组居中 */
+}
+.additional-links button {
+    /*margin: auto;*/
+    /*display: block;*/
+    /*width: 20%;*/
+    /*padding: 10px;*/
+    /*background-color: #007bff;*/
+    /*color: #fff;*/
+    /*border: none;*/
+    /*border-radius: 4px;*/
+    /*cursor: pointer;*/
+    /*font-size: 16px;*/
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 5px; /* 设置按钮之间的间距 */
+}
+.additional-links button:hover {
+    background-color: #0056b3;
+}
+.navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #ffffff;
+    overflow: hidden;
+    z-index: 1000; /* Ensure it stays above other content */
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar li {
+    margin: 0;
+}
+
+.navbar a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.ranking-panel {
+    position: fixed;
+    top: 150px; /* 距离顶部150px */
+    right: 20px; /* 距离右边20px */
+    width: 15%;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* 确保悬浮在其他内容之上 */
+}
+
+.ranking-panel h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.ranking-panel ol {
+    list-style-type: decimal;
+    padding-left: 20px;
+}
+
+.ranking-panel a {
+    text-decoration: none; /* 去除下划线 */
+    color: #333; /* 设置链接文字颜色 */
+    display: block; /* 使链接占据整行 */
+    padding: 5px 0; /* 添加内边距，使点击区域更大 */
+}
+
+.ranking-panel a:hover {
+    background-color: #f0f0f0; /* 悬停时改变背景色 */
+    color: #000; /* 悬停时改变文字颜色 */
+}
+
+
+.search-container {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 17.5%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.delete-button{
+    /*margin-left: 10px;*/
+    /*color: red;*/
+    /*cursor: pointer;*/
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: red;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    /*margin-left: auto;*/
+    margin: 0 5px 0 80%;
+}
+
+#search-box {
+    padding: 10px;
+    border: none;
+    outline: none;
+    flex-grow: 1;
+}
+
+#search-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #0056b3;
+}
+
+.article-cover-pic {
+    width: 250px;
+    height: 150px;
+    border-radius: 10%;
+    overflow: hidden; /* 添加这个属性以确保任何超出容器边界的内容都被裁剪掉 */
+    margin: 0 0 0 0;
+    display: block;
+}
+.article-cover-pic-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.ad-container {
+    width: 55%;
+    margin: 20px auto auto auto;
+    position: relative;
+    max-width: 800px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ad-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.ad-item {
+    min-width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.ad-item img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.ad-title {
+//ont-family: "微软雅黑", "Microsoft YaHei", sans-serif;
+    font-size:40px;
+    font-weight: bold;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+button.prev, button.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+button.prev {
+    left: 10px;
+}
+
+button.next {
+    right: 10px;
+}

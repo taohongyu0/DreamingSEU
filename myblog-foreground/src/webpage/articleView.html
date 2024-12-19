@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博文详情</title>
+    <link rel="stylesheet" href="../css/articleView.css">
+    <link rel="stylesheet" href="../css/topNavigation.css">
+</head>
+<body>
+<nav class="navbar">
+    <ul id="navList">
+    </ul>
+</nav>
+<div class="additional-links">
+<!--    <button onclick="backToIndex()">返回</button>-->
+</div>
+<div class="container">
+    <div class="post-header">
+        <h1 id="post-title"></h1>
+
+    </div>
+    <div class="post-meta" id="post-meta"></div>
+    <div class="post-content" id="post-content"></div>
+    <div class="post-stats" id="post-stats"></div>
+    <div class="comment-form">
+        <textarea id="comment-input" placeholder="在这里输入你的评论..."></textarea>
+        <button onclick="submitComment()">发表评论</button>
+    </div>
+    <div class="comment-section" id="comment-section">
+        <!-- 评论将会动态插入到这里 -->
+    </div>
+</div>
+
+
+<script src='../js/articleView.js'></script>
+<script src="../js/topNavigation.js"></script>
+</body>
+</html>

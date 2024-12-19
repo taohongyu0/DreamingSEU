@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/topNavigation.css">
+    <link rel="stylesheet" href="../css/personalCenter.css">
+    <title>个人中心</title>
+</head>
+<body>
+<nav class="navbar">
+    <ul id="navList">
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="header">
+        <h1>欢迎来到你的个人中心</h1>
+    </div>
+    <div class="sidebar">
+        <a href="#" id="viewMyBlog">查看自己的帖子</a>
+        <a href="#" id="changeProfile">修改头像</a>
+        <a href="#" id="changeInfo">修改个人信息</a>
+        <a href="#" id="changePassword">修改密码</a>
+    </div>
+    <div class="main-content clearfix">
+        <div class="profile-pic">
+            <img id="profilePicture" src="../testPhoto/3.png" alt="用户头像" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="info">
+            <h2 id="name">用户名</h2>
+            <p id="username">你的个人简介或简短自我介绍。</p>
+        </div>
+        <div class="stat-boxes">
+            <div class="stat-box">
+                <h3>声望</h3>
+                <p id="reputation">100</p>
+            </div>
+            <div class="stat-box">
+                <h3>被浏览量</h3>
+                <p id="hits">5000</p>
+            </div>
+            <div class="stat-box">
+                <h3>最后登录时间</h3>
+                <p id="loginTime">2023-04-01 12:34</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/topNavigation.js"></script>
+<script src="../js/personalCenter.js"></script>
+<script>
+    // 这里可以添加JavaScript代码来处理交互，比如点击事件等。
+    // 由于这是一个静态示例，所以没有包含任何JavaScript逻辑。
+</script>
+</body>
+<input type="file" id="fileInput" accept="image/*">
+</html>

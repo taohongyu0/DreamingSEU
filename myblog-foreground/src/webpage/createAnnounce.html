@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公告编辑与发布</title>
+    <link rel="stylesheet" href="../css/richText.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .container h1 {
+            margin-top: 0;
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+        .form-group button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        .additional-links {
+            margin-top: 20px;
+        }
+        .additional-links button {
+            background-color: #ff0000; /* 设置背景颜色为蓝色 */
+            color: white; /* 设置文字颜色为白色 */
+            font-size: 16px; /* 设置字体大小 */
+            padding: 10px 20px; /* 设置内边距，使按钮更大 */
+            border: none; /* 移除边框 */
+            border-radius: 5px; /* 设置圆角 */
+            cursor: pointer; /* 鼠标悬停时显示为手指形状，表示可点击 */
+        }
+        .additional-links button:hover {
+            background-color: #8b0000; /* 鼠标悬停时改变背景颜色 */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea,select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #coverPic {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>编辑并发布公告</h1>
+    <form id="blogForm">
+        <div class="form-group">
+            <label for="title">文章标题</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <button onclick="addCoverPic()">添加封面图片</button>
+        </div>
+        <label for="categoryDropdown">选择板块:</label>
+        <select id="categoryDropdown" name="category">
+            <option value="">加载中...</option>
+        </select>
+        <div class="form-group">
+<!--            <label for="content">文章内容</label>-->
+<!--            <textarea id="content" name="content" required></textarea>-->
+            <div class="editor-container">
+                <div class="toolbar">
+                    <button onclick="addBold()">B</button>
+                    <button onclick="addItalic()">I</button>
+                    <button onclick="addUnderline()">U</button>
+                </div>
+                <div class="editor-area" contenteditable="true" id="editor"></div>
+<!--                <div class="preview-area" id="preview"></div>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <button onclick="launch()">发布公告</button>
+<!--            <button type="submit">发布博客</button>-->
+        </div>
+    </form>
+    <div class="additional-links">
+        <button onclick="backToIndex()">不保存并返回到主页</button>
+    </div>
+    <div class="response" id="response"></div>
+</div>
+<script src="../js/richText.js"></script>
+<script>
+    let coverPic = "";
+    function backToIndex(){
+        if(localStorage.getItem("roleId")==="1"){
+            window.location.href = 'blogPush.html';
+        }
+        else if(localStorage.getItem("roleId")==="2"){
+            window.location.href = 'adminManageBlog.html';
+        }
+    }
+    function launch(){
+        const tokenStr = localStorage.getItem('token');
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('editor').innerHTML;
+        const board = document.getElementById('categoryDropdown').value;
+        const data = {
+            title:title,
+            content:content,
+            token:tokenStr,
+            boardId:board,
+            cover:coverPic
+        }
+
+        fetch('http://localhost:8088/article/createArticle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').textContent = '返回数据: ' + JSON.stringify(data);
+                if(data.code === 200){
+                    alert('公告已成功发布！');
+                    window.location.href = 'adminManageBlog.html';  //跳转网页
+                }
+                else if(data.message==="登录过期"){
+                    alert("登录过期，请重新登录！");
+                    window.location.href = 'login.html';
+                }
+                else{
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                //document.getElementById('response').textContent = '请求失败，请稍后重试。';
+                alert("请求失败，请稍后重试。");
+            });
+
+        // 这里你可以添加AJAX请求或其他逻辑来提交数据到服务器
+        console.log('文章标题:', title);
+        console.log('文章内容:', content);
+    }
+
+    document.getElementById('blogForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const tokenStr = localStorage.getItem('token');
+        if(tokenStr==null){
+            alert("登录过期，请重新登录！");
+            window.location.href = 'login.html';
+            return;
+        }
+    });
+
+    const categoryDropdown = document.getElementById('categoryDropdown');
+    fetch("http://localhost:8088/board/getAllByRoleId",
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: localStorage.getItem("roleId")
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 清空下拉选择菜单中的现有选项
+            categoryDropdown.innerHTML = '<option value="">选择一个板块</option>';
+
+            // 动态添加新的选项
+            data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id; // 假设每个板块都有一个唯一的ID
+                option.textContent = category.name; // 假设每个板块都有一个名称
+                categoryDropdown.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+            categoryDropdown.innerHTML = '<option value="">无法加载板块信息</option>';
+        });
+
+    async function addCoverPic() {
+        const fileInput = document.getElementById('coverPic');
+        fileInput.click();
+        fileInput.addEventListener('change', async function (event) {
+            if (!fileInput.files.length) {
+                alert('Please select an image file first.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            try {
+                const response = await fetch('http://localhost:8088/article/addCoverPic', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to upload image: ' + response.statusText);
+                }
+                else{
+                    try {
+                        // 解析响应体为JSON格式
+                        const data = await response.json();
+                        coverPic = data.data;
+                        alert("封面上传成功！");
+                    } catch (error) {
+                        // 处理解析JSON时可能发生的错误
+                        console.error('Error parsing JSON response:', error);
+                    }
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+    }
+
+
+</script>
+</body>
+<input type="file" id="coverPic" accept="image/*">
+</html>
