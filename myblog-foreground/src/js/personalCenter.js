@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let reputation = document.getElementById('reputation');
     let hits = document.getElementById('hits');
     let loginTime = document.getElementById('loginTime');
+    let trueUsername;//数据库中传回来的用户名
     profilePicture.src = imageUrl;
     fetch("http://localhost:8088/user/personalCenterInfo",{
             method: 'POST',
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 设置<img>元素src属性
                 profilePicture.src = imageUrl;
             }
+            trueUsername=data.username;
             document.getElementById('username').innerText = "@"+data.username;
             document.getElementById('name').innerText = data.name;
             document.getElementById('reputation').innerText = data.reputation.toFixed(1);
@@ -54,8 +56,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     changeInfo.addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.href = '/change-avatar.html';
+        event.preventDefault(); // 阻止默认行为（即不跳转至 href 指定的 URL）
+        const data = { username: trueUsername }; // 需要传递的数据
+        const queryString = new URLSearchParams(data).toString(); // 转换为查询字符串
+        window.location.href = `../webpage/changeInfo.html?${queryString}`; // 跳转到指定页面
+    });
+
+    changePassword.addEventListener('click', function(event) {
+        event.preventDefault(); // 阻止默认行为（即不跳转至 href 指定的 URL）
+        const data = { username: trueUsername }; // 需要传递的数据
+        const queryString = new URLSearchParams(data).toString(); // 转换为查询字符串
+        window.location.href = `../webpage/changePassword.html?${queryString}`; // 跳转到目标页面并附带查询参数
     });
 
     changeProfile.addEventListener('click', async function (event) {
@@ -121,10 +132,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
             window.location.href = 'personalCenter.html';
         });
-    });
-
-    changePassword.addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.href = '/change-password.html';
     });
 });

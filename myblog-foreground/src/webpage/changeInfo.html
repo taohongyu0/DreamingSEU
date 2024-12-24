@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修改个人信息</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            margin-bottom: 20px;
+        }
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .container input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .container button {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background: #0056b3;
+        }
+        .additional-links {
+            margin-top: 20px;
+        }
+        .response {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>修改个人信息</h2>
+    <form id="changeInfoForm">
+
+        <label for="name">新昵称：</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">新邮箱:</label>
+        <input type="email" id="email" name="email" required>
+
+        <button type="submit">重置个人信息</button>
+    </form>
+    <div class="additional-links">
+        <button onclick="backToIndex()" style="margin-left: auto;">返回</button>
+    </div>
+    <div class="response" id="response"></div>
+</div>
+
+<script>
+    // 返回个人中心功能
+    function backToIndex() {
+        window.location.href = 'personalCenter.html';
+    }
+
+    // 从username后端查询naem和email
+    document.addEventListener('DOMContentLoaded', function () {
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username'); // 获取 URL 中的 username 参数
+
+        if (!username) {
+            alert('无法获取用户名，请检查 URL 参数！');
+            return;
+        }
+
+
+        // 发送请求到后端以获取用户信息
+        fetch('http://localhost:8088/user/getNameAndEmail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: username
+        })
+            .then(async response => {
+                if (!response.ok) {
+                    // 提取错误信息并抛出
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `HTTP 错误！状态码：${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.code === 200) {
+                    const user=data.data;
+                    document.getElementById('name').value = user.name || '';
+                    document.getElementById('email').value = user.email || '';
+                } else {
+                    alert(`获取用户信息失败：${data.message || '未知错误'}`);
+                }
+            })
+            .catch(error => {
+                console.error('获取用户信息失败:', error);
+                alert(`获取用户信息失败：${error.message || '请稍后重试！'}`);
+            });
+    });
+
+    // 表单提交事件处理
+    document.getElementById('changeInfoForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // 获取 URL 中的查询参数
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username'); // 获取 username 参数
+        if (!username) {
+            alert("无法获取用户名，请重试！");
+            return;
+        }
+
+        // 获取表单中的输入数据
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        // 准备发送的数据
+        const data = {
+            username: username,
+            name: name,
+            email: email
+        };
+
+        // 发送请求到后端
+        fetch('http://localhost:8088/user/changeInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP 错误！状态码：${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(data.code === 200) {
+                    alert("个人信息修改成功！");
+                    window.location.href = 'personalCenter.html'; // 跳转到个人中心页面
+                } else {
+                    throw new Error(data.message || '未知错误');
+                }
+            })
+            .catch(error => {
+                console.error('请求失败:', error);
+                document.getElementById('response').textContent = '请求失败，请稍后重试。';
+                alert("个人信息修改失败，请检查输入或稍后再试！");
+            });
+    });
+</script>
+</body>
+</html>

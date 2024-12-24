@@ -18,6 +18,9 @@ public interface UserMapper {
     @Update("update user set user.password_hash=#{passwordHash} where user.username=#{username}")
     void updatePassword(User user);
 
+    @Update("update user set user.name=#{name},user.email=#{email} where user.username=#{username}")
+    void updateInfo(User user);
+
     @Select("select count(*) from user where username=#{username}")
     int usernameExist(String username);
 
