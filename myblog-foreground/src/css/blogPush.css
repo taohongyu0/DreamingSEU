@@ -272,6 +272,8 @@ header {
 }
 
 .ad-wrapper {
+    width: 1000px;
+    height: 400px;
     display: flex;
     transition: transform 0.5s ease-in-out;
 }

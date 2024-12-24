@@ -89,7 +89,7 @@ public class ArticleServiceImpl implements ArticleService {
             String now = String.valueOf(nowLD.getYear())+String.valueOf(nowLD.getMonth())+String.valueOf(nowLD.getDayOfMonth())+String.valueOf(nowLD.getHour())+String.valueOf(nowLD.getMinute())+String.valueOf(nowLD.getSecond())+String.valueOf(nowLD.getNano());
             String uniqueFileName = now +randomNumber+ ".png";
             // 创建上传目录（如果不存在）
-            Path uploadPath = Paths.get("../myblog-foreground/src/pictures/articleCovers").toAbsolutePath().normalize();
+            Path uploadPath = Paths.get("./myblog-foreground/src/pictures/articleCovers").toAbsolutePath().normalize();
             Files.createDirectories(uploadPath);
             // 保存文件到服务器
             Path filePath = uploadPath.resolve(uniqueFileName);

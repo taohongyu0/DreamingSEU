@@ -5,6 +5,15 @@ public class ArticleInRankingList {
     int rank;
     String title;
     int hits;
+    String cover;
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
 
     public int getId() {
         return id;
