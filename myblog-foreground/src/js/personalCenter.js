@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             trueUsername=data.username;
             document.getElementById('username').innerText = "@"+data.username;
             document.getElementById('name').innerText = data.name;
-            document.getElementById('reputation').innerText = data.reputation;
+            document.getElementById('reputation').innerText = data.reputation.toFixed(1);
             document.getElementById('hits').innerText = data.totalHits;
             document.getElementById('loginTime').innerText = data.loginTimeChinese;
         })
