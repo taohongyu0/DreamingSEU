@@ -57,8 +57,6 @@ public class UserController {
         return userService.forgetPassword(user);
     }
 
-
-
     @CrossOrigin(origins = "*")
     @PostMapping("/uploadProfile")
     public ResponseMessage<String> uploadProfile(@RequestParam("file") MultipartFile file,@RequestParam("token") String token) {
@@ -69,6 +67,24 @@ public class UserController {
     @PostMapping("/personalCenterInfo")
     public PersonalCenterInfo getCenterInfoByTokenStr(@RequestBody String tokenStr){
         return userService.getCenterInfoByTokenStr(tokenStr);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/changePassword")
+    public ResponseMessage changePassword(@RequestBody User user){
+        return userService.changePassword(user);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/getNameAndEmail")
+    public ResponseMessage<User> getUserByUsername(@RequestBody String username){
+        return userService.getUserByUsername(username);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/changeInfo")
+    public ResponseMessage changeInfo(@RequestBody User user){
+        return userService.changeInfo(user);
     }
 
     @CrossOrigin(origins = "*")

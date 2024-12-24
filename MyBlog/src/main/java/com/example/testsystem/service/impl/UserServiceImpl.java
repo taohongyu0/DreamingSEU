@@ -223,4 +223,61 @@ public class UserServiceImpl implements UserService {
 
         return centerInfo;
     }
+
+    @Override
+    public ResponseMessage<String> changePassword(User user) {
+        // 查询用户名是否存在以及获取用户
+        User existingUser = userMapper.getUserByUsername(user.getUsername());
+
+        // 校验用户名是否存在
+        if (existingUser==null) {
+            return ResponseMessage.fail(500, "用户名有误");
+        }
+
+        String existingPasswordHash = existingUser.getPasswordHash();
+        // 验证用户输入的旧密码是否正确
+        if (existingPasswordHash.equals(md5.getMD5Hash(user.getOldPasswordHash()))) {
+            // 更新密码
+            user.setPasswordHash(md5.getMD5Hash(user.getPasswordHash()));
+            userMapper.updatePassword(user);
+            return ResponseMessage.success("密码修改成功");
+        }
+        System.out.println("false ");
+        return ResponseMessage.fail(401, "旧密码不正确");
+
+    }
+
+    @Override
+    public ResponseMessage<User> getUserByUsername(String username) {
+        try {
+            if (username == null || username.trim().isEmpty()) {
+                return ResponseMessage.fail(400, "用户名不能为空");
+            }
+
+            User user = userMapper.getUserByUsername(username);  // 可能抛出 IllegalArgumentException
+            return ResponseMessage.success(user);
+        } catch (IllegalArgumentException e) {
+            return ResponseMessage.fail(404, "用户不存在：" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseMessage.fail(500, "服务器内部错误：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseMessage<String> changeInfo(User user) {
+        // 查询用户名是否存在以及获取用户
+        User existingUser = userMapper.getUserByUsername(user.getUsername());
+
+        // 校验用户名是否存在
+        if (existingUser==null) {
+            return ResponseMessage.fail(500, "用户名有误");
+        }
+
+        existingUser.setEmail(user.getEmail());
+        existingUser.setName(user.getName());
+
+        userMapper.updateInfo(user);
+        return ResponseMessage.success("个人信息修改成功");
+
+    }
 }

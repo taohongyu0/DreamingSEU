@@ -15,4 +15,7 @@ public interface UserService {
     ResponseMessage<String> uploadProfile(MultipartFile file,String token);
     PersonalCenterInfo getCenterInfoByTokenStr(String tokenStr);
     PersonalCenterInfo getCenterInfoByUserId(int userId);
+    ResponseMessage<String> changePassword(User user);
+    ResponseMessage<User> getUserByUsername(String username);
+    ResponseMessage<String> changeInfo(User user);
 }
