@@ -3,7 +3,7 @@ package com.example.testsystem.model.supplement;
 import java.time.LocalDateTime;
 
 public class PersonalCenterInfo {
-    int reputation; //发表的博文被点赞总量
+    double reputation; //声望值
     int totalHits; //发表的博文被点击总量
     LocalDateTime loginTime; //最后登录时间
     String loginTimeChinese; //中文版的最后登录时间
@@ -20,11 +20,11 @@ public class PersonalCenterInfo {
         this.id = id;
     }
 
-    public int getReputation() {
+    public double getReputation() {
         return reputation;
     }
 
-    public void setReputation(int reputation) {
+    public void setReputation(double reputation) {
         this.reputation = reputation;
     }
 

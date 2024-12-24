@@ -52,4 +52,10 @@ public interface ArticleMapper {
 
     @Select("select article.id,article.title,user.name as authorName from article inner join user on article.author_id=user.id where article.author_id=#{authorId} order by modify_time")
     List<Article> viewBlogByAuthorId(int authorId);
+
+    @Select("select article.id,article.title,article.author_id,article.content,article.create_time,article.modify_time,article.hits,article.likes,article.dislikes,article.allow_comment,article.board_id,article.cover,(select count(collection.article_id) from collection where collection.article_id=article.id) as collect from article where article.author_id=#{authorId}")
+    List<Article> getArticleByAuthorId(int authorId);
+
+    @Select("select count(*) from comment where comment.article_id=#{articleId}")
+    int getCommentAmountByArticleId(int articleId);
 }
