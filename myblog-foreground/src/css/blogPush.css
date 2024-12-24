@@ -127,10 +127,10 @@ header {
 
 .ranking-panel {
     position: fixed;
-    top: 150px; /* 距离顶部150px */
+    top: 69px; /* 距离顶部50px */
     right: 20px; /* 距离右边20px */
     width: 15%;
-    padding: 20px;
+    padding: 15px 20px 0 20px;
     background-color: #fff;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -160,10 +160,46 @@ header {
     color: #000; /* 悬停时改变文字颜色 */
 }
 
+.reputation-panel {
+    position: fixed;
+    top:  66%; /* 距离顶部50px */
+    right: 20px; /* 距离右边20px */
+    width: 15%;
+    padding: 15px 20px 0 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* 确保悬浮在其他内容之上 */
+}
+
+.reputation-panel h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.reputation-panel ol {
+    list-style-type: decimal;
+    padding-left: 20px;
+}
+
+.reputation-panel a {
+    text-decoration: none; /* 去除下划线 */
+    color: #333; /* 设置链接文字颜色 */
+    display: block; /* 使链接占据整行 */
+    padding: 5px 0; /* 添加内边距，使点击区域更大 */
+}
+
+.reputation-panel a:hover {
+    background-color: #f0f0f0; /* 悬停时改变背景色 */
+    color: #000; /* 悬停时改变文字颜色 */
+}
+
 
 .search-container {
     position: fixed;
-    top: 90px;
+    z-index: 9999;
+    top: 25px;
     right: 20px;
     width: 17.5%;
     transform: translateY(-50%);

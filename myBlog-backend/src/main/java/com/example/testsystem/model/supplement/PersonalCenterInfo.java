@@ -10,7 +10,16 @@ public class PersonalCenterInfo {
     boolean profileExist; //头像是否存在
     String username; //用户名
     String name; //昵称
+    int rank; //排名
     int id;
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
     public int getId() {
         return id;

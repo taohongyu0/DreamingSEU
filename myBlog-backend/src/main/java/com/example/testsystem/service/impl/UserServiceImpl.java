@@ -9,6 +9,7 @@ import com.example.testsystem.model.User;
 import com.example.testsystem.model.supplement.PersonalCenterInfo;
 import com.example.testsystem.model.toback.RoleIdAndToken;
 import com.example.testsystem.redis.ArticleRedis;
+import com.example.testsystem.service.ReputationService;
 import com.example.testsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,8 @@ public class UserServiceImpl implements UserService {
     CommentMapper commentMapper;
     @Autowired
     ArticleRedis articleRedis;
+    @Autowired
+    ReputationService reputationService;
 //    public String UPLOADED_FOLDER = "F:\\Grade4Term1\\Java\\MyBlog-2\\myblog-foreground\\src\\pictures\\userProfiles";
     public String UPLOADED_FOLDER = "../myblog-foreground/src/pictures/userProfiles";
 
@@ -186,23 +189,7 @@ public class UserServiceImpl implements UserService {
         PersonalCenterInfo centerInfo = userMapper.getCenterInfoByTokenStr(tokenStr);
         centerInfo.setTotalHits(hitsMapper.totalLaunchedArticleHitsByAuthorId(centerInfo.getId()));
 
-        int articleLikes = likesMapper.totalLaunchedArticleLikesByAuthorId(centerInfo.getId());
-        List<Article> userArticles = articleMapper.getArticleByAuthorId(centerInfo.getId()); //获取该用户发表的所有文章
-        double articleReputation = 0; //所有文章提供的声望值
-        for(Article article:userArticles){
-            double likeRate = 1; //点赞率
-            if(article.getLikes()>10){
-                likeRate = (double) (article.getLikes() /(article.getLikes()+article.getDislikes()))+1;
-            }
-            int commentAmount = articleMapper.getCommentAmountByArticleId(article.getId());
-            articleReputation = articleReputation + 10 + article.getLikes()*likeRate + article.getCollect()*10 + article.getHits()*0.2 + commentAmount*0.5;
-            if(article.getHits()>20){
-                articleReputation = articleReputation - article.getDislikes()*2;
-            }
-        }
-        int commentLikes = likesMapper.totalLaunchedCommentLikesByAuthorId(centerInfo.getId());
-        int commentDislikes = dislikesMapper.totalLaunchedCommentLikesByAuthorId(centerInfo.getId());
-        centerInfo.setReputation(100+articleReputation+commentLikes*0.5-commentDislikes*0.5);
+        centerInfo.setReputation(reputationService.calByUserId(centerInfo.getId()));
 
         // 指定要检查的文件路径
         String filePath = UPLOADED_FOLDER+"/"+centerInfo.getId() +".png";
@@ -225,12 +212,10 @@ public class UserServiceImpl implements UserService {
     public PersonalCenterInfo getCenterInfoByUserId(int userId) {
         PersonalCenterInfo centerInfo = userMapper.getCenterInfoByUserId(userId);
         centerInfo.setTotalHits(hitsMapper.totalLaunchedArticleHitsByAuthorId(userId));
-        int articleLikes = likesMapper.totalLaunchedArticleLikesByAuthorId(userId);
-        int commentLikes = likesMapper.totalLaunchedCommentLikesByAuthorId(userId);
-        centerInfo.setReputation(articleLikes+commentLikes);
+        centerInfo.setReputation(reputationService.calByUserId(userId));
 
         // 指定要检查的文件路径
-        String filePath = UPLOADED_FOLDER+"/"+centerInfo.getId() +".png"; // 替换为你的文件路径
+        String filePath = UPLOADED_FOLDER+"/"+centerInfo.getId() +".png";
         // 创建File对象
         File file = new File(filePath);
         // 判断文件是否存在
@@ -295,4 +280,26 @@ public class UserServiceImpl implements UserService {
         return ResponseMessage.success("个人信息修改成功");
 
     }
+
+    @Override
+    public ResponseMessage<String> setReputationRank() {
+        List<PersonalCenterInfo> userList = userMapper.getAllUserId();
+        for(PersonalCenterInfo user:userList) {
+            user.setReputation(reputationService.calByUserId(user.getId()));
+            userMapper.updateReputationByUserId(user);
+        }
+        return ResponseMessage.success("success");
+    }
+
+    @Override
+    public List<PersonalCenterInfo> getReputationRank() {
+        List<PersonalCenterInfo> userList = userMapper.getReputationRank();
+        for(int i=0;i<userList.size();i++){
+            PersonalCenterInfo tempUser = userList.get(i);
+            tempUser.setRank(i+1);
+            userList.set(i,tempUser);
+        }
+        return userList;
+    }
+
 }

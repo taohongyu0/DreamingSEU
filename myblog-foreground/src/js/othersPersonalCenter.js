@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 设置<img>元素src属性
                 profilePicture.src = imageUrl;
             }
+            localStorage.setItem("username",data.username);
             document.getElementById('header-title').innerText = "欢迎来到"+data.name+"的个人中心";
             document.getElementById('username').innerText = "@"+data.username;
             document.getElementById('name').innerText = data.name;

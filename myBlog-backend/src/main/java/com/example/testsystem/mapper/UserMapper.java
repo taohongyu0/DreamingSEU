@@ -4,6 +4,8 @@ import com.example.testsystem.model.User;
 import com.example.testsystem.model.supplement.PersonalCenterInfo;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     @Insert("insert into user (username,name,password_hash,email,role_id,banned) values (#{username},#{name},#{passwordHash},#{email},#{roleId},#{banned})")
@@ -20,6 +22,9 @@ public interface UserMapper {
 
     @Update("update user set user.name=#{name},user.email=#{email} where user.username=#{username}")
     void updateInfo(User user);
+
+    @Update("update user set user.reputation=#{reputation} where user.id=#{id}")
+    void updateReputationByUserId(PersonalCenterInfo personalCenterInfo);
 
     @Select("select count(*) from user where username=#{username}")
     int usernameExist(String username);
@@ -41,4 +46,10 @@ public interface UserMapper {
 
     @Select("select user.id,user.username,user.name from user where user.id=#{userId}")
     PersonalCenterInfo getCenterInfoByUserId(int userId);
+
+    @Select("select user.id from user")
+    List<PersonalCenterInfo> getAllUserId();
+
+    @Select("select user.id,user.username,user.name,user.reputation from user order by user.reputation desc limit 5")
+    List<PersonalCenterInfo> getReputationRank();
 }

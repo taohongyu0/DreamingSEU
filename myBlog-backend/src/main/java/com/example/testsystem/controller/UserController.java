@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @RestController  //转json文本
@@ -97,5 +98,17 @@ public class UserController {
     @PostMapping("/del")
     public ResponseMessage<String> delUser(@RequestBody String userId){
         return userService.delUser(Integer.parseInt(userId));
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/getReputationRank")
+    public List<PersonalCenterInfo> getReputationRank(){
+        return userService.getReputationRank();
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/setReputationRank")
+    public ResponseMessage<String> setReputationRank(){
+        return userService.setReputationRank();
     }
 }
