@@ -17,6 +17,7 @@ public interface ArticleService {
     ResponseMessage<String> addCoverPic(MultipartFile file);
     List<Article> summaryView();
     List<Article> viewByAuthorId(String token);
+    List<Article> viewByUserCollection(String username); //用户的收藏夹
     List<Article> searchArticle(String keyWord);
     List<Article> getArticleByBoardName(String boardName);
     List<ArticleInRankingList> getArticleRankingList();

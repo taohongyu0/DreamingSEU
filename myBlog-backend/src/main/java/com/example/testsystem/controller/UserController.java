@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @RestController  //转json文本
@@ -57,8 +58,6 @@ public class UserController {
         return userService.forgetPassword(user);
     }
 
-
-
     @CrossOrigin(origins = "*")
     @PostMapping("/uploadProfile")
     public ResponseMessage<String> uploadProfile(@RequestParam("file") MultipartFile file,@RequestParam("token") String token) {
@@ -72,6 +71,24 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "*")
+    @PostMapping("/changePassword")
+    public ResponseMessage changePassword(@RequestBody User user){
+        return userService.changePassword(user);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/getNameAndEmail")
+    public ResponseMessage<User> getUserByUsername(@RequestBody String username){
+        return userService.getUserByUsername(username);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/changeInfo")
+    public ResponseMessage changeInfo(@RequestBody User user){
+        return userService.changeInfo(user);
+    }
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/othersCenterInfo")
     public PersonalCenterInfo getOthersCenterInfoByTokenStr(@RequestBody String userId){
         return userService.getCenterInfoByUserId(Integer.parseInt(userId));
@@ -81,5 +98,17 @@ public class UserController {
     @PostMapping("/del")
     public ResponseMessage<String> delUser(@RequestBody String userId){
         return userService.delUser(Integer.parseInt(userId));
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/getReputationRank")
+    public List<PersonalCenterInfo> getReputationRank(){
+        return userService.getReputationRank();
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/setReputationRank")
+    public ResponseMessage<String> setReputationRank(){
+        return userService.setReputationRank();
     }
 }

@@ -9,6 +9,7 @@ import com.example.testsystem.model.User;
 import com.example.testsystem.model.supplement.PersonalCenterInfo;
 import com.example.testsystem.model.toback.RoleIdAndToken;
 import com.example.testsystem.redis.ArticleRedis;
+import com.example.testsystem.service.ReputationService;
 import com.example.testsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,8 @@ public class UserServiceImpl implements UserService {
     CommentMapper commentMapper;
     @Autowired
     ArticleRedis articleRedis;
+    @Autowired
+    ReputationService reputationService;
 //    public String UPLOADED_FOLDER = "F:\\Grade4Term1\\Java\\MyBlog-2\\myblog-foreground\\src\\pictures\\userProfiles";
     public String UPLOADED_FOLDER = "../myblog-foreground/src/pictures/userProfiles";
 
@@ -185,12 +188,11 @@ public class UserServiceImpl implements UserService {
     public PersonalCenterInfo getCenterInfoByTokenStr(String tokenStr) {
         PersonalCenterInfo centerInfo = userMapper.getCenterInfoByTokenStr(tokenStr);
         centerInfo.setTotalHits(hitsMapper.totalLaunchedArticleHitsByAuthorId(centerInfo.getId()));
-        int articleLikes = likesMapper.totalLaunchedArticleLikesByAuthorId(centerInfo.getId());
-        int commentLikes = likesMapper.totalLaunchedCommentLikesByAuthorId(centerInfo.getId());
-        centerInfo.setReputation(articleLikes+commentLikes);
+
+        centerInfo.setReputation(reputationService.calByUserId(centerInfo.getId()));
 
         // 指定要检查的文件路径
-        String filePath = UPLOADED_FOLDER+"/"+centerInfo.getId() +".png"; // 替换为你的文件路径
+        String filePath = UPLOADED_FOLDER+"/"+centerInfo.getId() +".png";
         // 创建File对象
         File file = new File(filePath);
         // 判断文件是否存在
@@ -210,12 +212,10 @@ public class UserServiceImpl implements UserService {
     public PersonalCenterInfo getCenterInfoByUserId(int userId) {
         PersonalCenterInfo centerInfo = userMapper.getCenterInfoByUserId(userId);
         centerInfo.setTotalHits(hitsMapper.totalLaunchedArticleHitsByAuthorId(userId));
-        int articleLikes = likesMapper.totalLaunchedArticleLikesByAuthorId(userId);
-        int commentLikes = likesMapper.totalLaunchedCommentLikesByAuthorId(userId);
-        centerInfo.setReputation(articleLikes+commentLikes);
+        centerInfo.setReputation(reputationService.calByUserId(userId));
 
         // 指定要检查的文件路径
-        String filePath = UPLOADED_FOLDER+"/"+centerInfo.getId() +".png"; // 替换为你的文件路径
+        String filePath = UPLOADED_FOLDER+"/"+centerInfo.getId() +".png";
         // 创建File对象
         File file = new File(filePath);
         // 判断文件是否存在
@@ -223,4 +223,83 @@ public class UserServiceImpl implements UserService {
 
         return centerInfo;
     }
+
+    @Override
+    public ResponseMessage<String> changePassword(User user) {
+        // 查询用户名是否存在以及获取用户
+        User existingUser = userMapper.getUserByUsername(user.getUsername());
+
+        // 校验用户名是否存在
+        if (existingUser==null) {
+            return ResponseMessage.fail(500, "用户名有误");
+        }
+
+        String existingPasswordHash = existingUser.getPasswordHash();
+        // 验证用户输入的旧密码是否正确
+        if (existingPasswordHash.equals(md5.getMD5Hash(user.getOldPasswordHash()))) {
+            // 更新密码
+            user.setPasswordHash(md5.getMD5Hash(user.getPasswordHash()));
+            userMapper.updatePassword(user);
+            return ResponseMessage.success("密码修改成功");
+        }
+        System.out.println("false ");
+        return ResponseMessage.fail(401, "旧密码不正确");
+
+    }
+
+    @Override
+    public ResponseMessage<User> getUserByUsername(String username) {
+        try {
+            if (username == null || username.trim().isEmpty()) {
+                return ResponseMessage.fail(400, "用户名不能为空");
+            }
+
+            User user = userMapper.getUserByUsername(username);  // 可能抛出 IllegalArgumentException
+            return ResponseMessage.success(user);
+        } catch (IllegalArgumentException e) {
+            return ResponseMessage.fail(404, "用户不存在：" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseMessage.fail(500, "服务器内部错误：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseMessage<String> changeInfo(User user) {
+        // 查询用户名是否存在以及获取用户
+        User existingUser = userMapper.getUserByUsername(user.getUsername());
+
+        // 校验用户名是否存在
+        if (existingUser==null) {
+            return ResponseMessage.fail(500, "用户名有误");
+        }
+
+        existingUser.setEmail(user.getEmail());
+        existingUser.setName(user.getName());
+
+        userMapper.updateInfo(user);
+        return ResponseMessage.success("个人信息修改成功");
+
+    }
+
+    @Override
+    public ResponseMessage<String> setReputationRank() {
+        List<PersonalCenterInfo> userList = userMapper.getAllUserId();
+        for(PersonalCenterInfo user:userList) {
+            user.setReputation(reputationService.calByUserId(user.getId()));
+            userMapper.updateReputationByUserId(user);
+        }
+        return ResponseMessage.success("success");
+    }
+
+    @Override
+    public List<PersonalCenterInfo> getReputationRank() {
+        List<PersonalCenterInfo> userList = userMapper.getReputationRank();
+        for(int i=0;i<userList.size();i++){
+            PersonalCenterInfo tempUser = userList.get(i);
+            tempUser.setRank(i+1);
+            userList.set(i,tempUser);
+        }
+        return userList;
+    }
+
 }

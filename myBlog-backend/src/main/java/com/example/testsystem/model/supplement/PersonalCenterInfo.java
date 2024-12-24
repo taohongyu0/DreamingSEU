@@ -3,14 +3,23 @@ package com.example.testsystem.model.supplement;
 import java.time.LocalDateTime;
 
 public class PersonalCenterInfo {
-    int reputation; //发表的博文被点赞总量
+    double reputation; //声望值
     int totalHits; //发表的博文被点击总量
     LocalDateTime loginTime; //最后登录时间
     String loginTimeChinese; //中文版的最后登录时间
     boolean profileExist; //头像是否存在
     String username; //用户名
     String name; //昵称
+    int rank; //排名
     int id;
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
     public int getId() {
         return id;
@@ -20,11 +29,11 @@ public class PersonalCenterInfo {
         this.id = id;
     }
 
-    public int getReputation() {
+    public double getReputation() {
         return reputation;
     }
 
-    public void setReputation(int reputation) {
+    public void setReputation(double reputation) {
         this.reputation = reputation;
     }
 

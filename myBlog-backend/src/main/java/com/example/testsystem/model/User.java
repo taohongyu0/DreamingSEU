@@ -12,6 +12,7 @@ public class User {
     String username;
     String name;
     String passwordHash;
+    String oldPasswordHash;
     String email;
     String profileLink;
     int roleId;
@@ -63,6 +64,14 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getOldPasswordHash() {
+        return oldPasswordHash;
+    }
+
+    public void setOldPasswordHash(String oldPasswordHash) {
+        this.oldPasswordHash = oldPasswordHash;
     }
 
     public String getEmail() {
