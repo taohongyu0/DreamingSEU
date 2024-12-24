@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 设置<img>元素src属性
                 profilePicture.src = imageUrl;
             }
+            localStorage.setItem("username",data.username);
             trueUsername=data.username;
             document.getElementById('username').innerText = "@"+data.username;
             document.getElementById('name').innerText = data.name;
@@ -48,12 +49,18 @@ document.addEventListener('DOMContentLoaded', function() {
     var changeInfo = document.getElementById('changeInfo');
     var changeProfile = document.getElementById('changeProfile');
     var changePassword = document.getElementById('changePassword');
+    var collection = document.getElementById('collection');
 
     // 为每个链接添加点击事件监听器
     viewMyBlog.addEventListener('click', function(event) {
         event.preventDefault(); // 阻止默认行为（即不跳转至 href 指定的 URL）
         window.location.href = '../webpage/myBlog.html'; // 跳转到指定页面
     });
+
+    collection.addEventListener('click',function (event){
+        event.preventDefault();
+        window.location.href = '../webpage/myCollection.html';
+    })
 
     changeInfo.addEventListener('click', function(event) {
         event.preventDefault(); // 阻止默认行为（即不跳转至 href 指定的 URL）

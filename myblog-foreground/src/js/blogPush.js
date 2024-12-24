@@ -153,9 +153,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-document.addEventListener('DOMContentLoaded', function() {  //博文排行榜
-    const rankingList = document.getElementById('ranking-list');
+document.addEventListener('DOMContentLoaded', function() {
+    const rankingList = document.getElementById('ranking-list'); //博文排行榜
+    const reputationList = document.getElementById('reputation-list'); //声望排行榜
     let articles = [];
+    let users = [];
     // const articles = [
     //     { id: 1, rank: 1, title: '文章标题一', views: 1000, url: 'article.html?id=1' },
     //     { id: 2, rank: 2, title: '文章标题二', views: 800, url: 'article.html?id=2' },
@@ -214,6 +216,63 @@ document.addEventListener('DOMContentLoaded', function() {  //博文排行榜
                         break;
                 }
                 rankingList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            alert("error-请求失败")
+            console.error('请求失败:', error);
+        });
+
+    fetch('http://localhost:8088/user/getReputationRank',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                alert("response-网络响应失败");
+                throw new Error('网络响应失败');
+            }
+            return response.json();
+        })
+        .then(data => {
+            data.forEach(item => {
+                const tempUser= {
+                    id:item.id,
+                    rank:item.rank,
+                    title:item.username,
+                    views:item.reputation,
+                    url:"othersPersonalCenter.html"
+                }
+                users.push(tempUser);
+                console.log(users);
+            });
+
+            users.forEach(user => {
+                const listItem = document.createElement('a');
+                listItem.href = user.url; // 设置链接的URL
+                listItem.addEventListener('click', function(event) {
+                    localStorage.setItem('viewOthersUserId', user.id);
+                });
+                listItem.textContent = `${user.rank}. ${user.title} - 声望: ${user.views}`;
+                switch (user.rank) {
+                    case 1:
+                        listItem.style.color = '#8B0000';
+                        listItem.style.fontWeight = 'bold';
+                        break;
+                    case 2:
+                        listItem.style.color = 'red';
+                        break;
+                    case 3:
+                        listItem.style.color = 'orange';
+                        break;
+                    // 你可以添加更多的case来处理更多的排名，或者使用一个默认情况
+                    default:
+                        // 对于排名4及以后的数字，你可以设置一个默认颜色或不做任何处理
+                        break;
+                }
+                reputationList.appendChild(listItem);
             });
         })
         .catch(error => {

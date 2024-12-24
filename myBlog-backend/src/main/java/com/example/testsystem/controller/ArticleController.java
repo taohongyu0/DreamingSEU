@@ -58,6 +58,12 @@ public class ArticleController {
     }
 
     @CrossOrigin(origins = "*")
+    @PostMapping("/myCollection")
+    public List<Article> myCollection(@RequestBody String username){
+        return articleService.viewByUserCollection(username);
+    }
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/blogPushNull")
     public List<Article> blogPushNull(){
         return new ArrayList<>();

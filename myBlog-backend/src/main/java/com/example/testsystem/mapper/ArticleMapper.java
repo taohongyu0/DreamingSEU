@@ -50,8 +50,11 @@ public interface ArticleMapper {
     @Select("select id,title,author_id as authorId,content,create_time as createTime,modify_time as modifyTime,hits,likes,dislikes,allow_comment as allowComment,board_id as boardId from article where article.id=#{id}")
     Article getArticleById(int id);
 
-    @Select("select article.id,article.title,user.name as authorName from article inner join user on article.author_id=user.id where article.author_id=#{authorId} order by modify_time")
+    @Select("select article.id,article.title,user.name as authorName from article inner join user on article.author_id=user.id where article.author_id=#{authorId} order by modify_time desc")
     List<Article> viewBlogByAuthorId(int authorId);
+
+    @Select("select article.id,article.title,(select user.name from user where article.author_id=user.id) as authorName from article inner join collection on article.id=collection.article_id inner join user on collection.user_id=user.id where user.username=#{username} order by modify_time desc")
+    List<Article> viewBlogByUserCollection(String username);
 
     @Select("select article.id,article.title,article.author_id,article.content,article.create_time,article.modify_time,article.hits,article.likes,article.dislikes,article.allow_comment,article.board_id,article.cover,(select count(collection.article_id) from collection where collection.article_id=article.id) as collect from article where article.author_id=#{authorId}")
     List<Article> getArticleByAuthorId(int authorId);

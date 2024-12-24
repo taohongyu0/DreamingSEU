@@ -116,6 +116,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<Article> viewByUserCollection(String username) {
+        return articleMapper.viewBlogByUserCollection(username);
+    }
+
+    @Override
     public List<Article> searchArticle(String keyWord) {
         return articleMapper.search(keyWord);
     }
