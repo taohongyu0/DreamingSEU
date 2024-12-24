@@ -155,14 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', function() {  //博文排行榜
     const rankingList = document.getElementById('ranking-list');
-    let articles = [];
     // const articles = [
     //     { id: 1, rank: 1, title: '文章标题一', views: 1000, url: 'article.html?id=1' },
     //     { id: 2, rank: 2, title: '文章标题二', views: 800, url: 'article.html?id=2' },
     //     { id: 3, rank: 3, title: '文章标题三', views: 600, url: 'article.html?id=3' }
     //     // 添加更多文章对象，每个对象都包含id、rank、title、views和url属性
     // ];
-
+    let articles = [];
     fetch('http://localhost:8088/article/rankingList',{
         method: 'POST',
         headers: {
@@ -186,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {  //博文排行榜
                     url:"articleView.html"
                 }
                 articles.push(tempArticle);
-                console.log(articles);
             });
 
             articles.forEach(article => {
@@ -251,15 +249,12 @@ document.addEventListener('DOMContentLoaded', function() {   //搜索博文
     });
 });
 
-
-let currentIndex = 0;
-const adItems = document.querySelectorAll('.ad-item');
 const adWrapper = document.getElementById('adWrapper');
-const totalAds = adItems.length;
+let currentIndex = 0;
+const totalAds = 3;
 const scrollInterval = 3000; // 3秒
 document.getElementById('adLeftButton').innerText = '<';
 document.getElementById('adRightButton').innerText = '>';
-
 function scrollToAd(index) {
     const offset = -index * 100 + '%';
     adWrapper.style.transform = `translateX(${offset})`;
@@ -275,9 +270,62 @@ function scrollPrev() {
     currentIndex = (currentIndex - 1 + totalAds) % totalAds;
     scrollToAd(currentIndex);
 }
+document.addEventListener('DOMContentLoaded', function() {
+    let articles = [];
+    fetch('http://localhost:8088/article/rankingList',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                alert("response-网络响应失败");
+                throw new Error('网络响应失败');
+            }
+            return response.json();
+        })
+        .then(data => {
+            data.forEach(item => {
+                const tempArticle = {
+                    id: item.id,
+                    rank: item.rank,
+                    title: item.title,
+                    views: item.hits,
+                    cover: item.cover,
+                    url: "articleView.html"
+                }
+                if(tempArticle.rank >=1&& tempArticle.rank<=totalAds){
+                    articles.push(tempArticle);
+                }
+            });
+            articles.forEach(article => {
+                const adItem = document.createElement('div');
+                adItem.className = 'ad-item';
+                adItem.addEventListener('click', function(event) {
+                    localStorage.setItem("tempArticleId",article.id);
+                    window.location.href = 'articleView.html';
+                });
+                const image = document.createElement('img');
+                image.src = '../pictures/articleCovers/'+article.cover;
+                image.alt = article.title;
 
-// 自动滚动
-setInterval(scrollNext, scrollInterval);
+                const adTitle = document.createElement('div');
+                adTitle.className = 'ad-title';
+                adTitle.textContent = article.title;
 
-// 初始显示第一个广告
-scrollToAd(currentIndex);
+                adItem.appendChild(image);
+                adItem.appendChild(adTitle);
+
+                adWrapper.appendChild(adItem);
+            });
+            // 自动滚动
+            setInterval(scrollNext, scrollInterval);
+            // 初始显示第一个广告
+            scrollToAd(currentIndex);
+        }).catch(error => {
+        alert("error-请求失败")
+        console.error('请求失败:', error);
+    });
+
+});

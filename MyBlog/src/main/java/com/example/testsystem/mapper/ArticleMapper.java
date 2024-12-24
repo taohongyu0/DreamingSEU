@@ -35,7 +35,7 @@ public interface ArticleMapper {
     @Update("update article set article.author_id=-1 where article.author_id=#{authorId}")
     void updateAuthorIdTo_1(int authorId);
 
-    @Select("select article.id,article.title,article.hits from article where date(article.modify_time) >= date_sub(now(),interval 7 day) order by article.hits desc limit 10")
+    @Select("select article.id,article.title,article.hits,article.cover from article where date(article.modify_time) >= date_sub(now(),interval 7 day) order by article.hits desc limit 10")
     List<ArticleInRankingList> getArticleRankingList();
 
     @Select("select article.id,article.title,user.name as authorName,cover from article inner join user on article.author_id=user.id order by modify_time desc limit 100")

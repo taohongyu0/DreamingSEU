@@ -98,6 +98,9 @@
             <label for="title">文章标题</label>
             <input type="text" id="title" name="title" required>
         </div>
+        <div class="form-group">
+            <button onclick="addCoverPic()">添加封面图片</button>
+        </div>
         <label for="categoryDropdown">选择板块:</label>
         <select id="categoryDropdown" name="category">
             <option value="">加载中...</option>
@@ -127,6 +130,7 @@
 </div>
 <script src="../js/richText.js"></script>
 <script>
+    let coverPic = "";
     function backToIndex(){
         if(localStorage.getItem("roleId")==="1"){
             window.location.href = 'blogPush.html';
@@ -144,7 +148,8 @@
             title:title,
             content:content,
             token:tokenStr,
-            boardId:board
+            boardId:board,
+            cover:coverPic
         }
 
         fetch('http://localhost:8088/article/createArticle', {
@@ -222,6 +227,42 @@
             console.error('There has been a problem with your fetch operation:', error);
             categoryDropdown.innerHTML = '<option value="">无法加载板块信息</option>';
         });
+
+    async function addCoverPic() {
+        const fileInput = document.getElementById('coverPic');
+        fileInput.click();
+        fileInput.addEventListener('change', async function (event) {
+            if (!fileInput.files.length) {
+                alert('Please select an image file first.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            try {
+                const response = await fetch('http://localhost:8088/article/addCoverPic', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to upload image: ' + response.statusText);
+                }
+                else{
+                    try {
+                        // 解析响应体为JSON格式
+                        const data = await response.json();
+                        coverPic = data.data;
+                        alert("封面上传成功！");
+                    } catch (error) {
+                        // 处理解析JSON时可能发生的错误
+                        console.error('Error parsing JSON response:', error);
+                    }
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+    }
 </script>
 </body>
+<input type="file" id="coverPic" accept="image/*">
 </html>
