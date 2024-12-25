@@ -117,7 +117,7 @@
             </script>
         </div>
         <div class="form-group">
-            <button onclick="launch()">发布博客</button>
+            <button onclick="articleLaunch()">发布博客</button>
             <!--            <button type="submit">发布博客</button>-->
         </div>
     </form>
@@ -137,18 +137,36 @@
             window.location.href = 'adminManageBlog.html';
         }
     }
-    function launch(){
+    function articleLaunch(){
         const tokenStr = localStorage.getItem('token');
         const title = document.getElementById('title').value;
-        const content = document.getElementById('editor').innerHTML;
-        const board = document.getElementById('categoryDropdown').value;
-        const data = {
-            title:title,
-            content:content,
-            token:tokenStr,
-            boardId:board,
-            cover:coverPic
+        // const content = document.getElementById('editor').innerHTML;
+        // const board = document.getElementById('categoryDropdown').value;
+
+        let data;
+        // 检查编辑器是否已准备就绪
+        if (UE.getEditor('container').isReady) {
+            const content = UE.getEditor('container').getContent(); // 获取编辑器中的 HTML 内容
+            const board = document.getElementById('categoryDropdown').value;
+            data = {
+                title: title,
+                content: content,
+                token: tokenStr,
+                boardId: board,
+                cover:coverPic
+            }
+            // 其他操作
+        } else {
+            console.log('Editor is not ready yet');
         }
+
+        // const data = {
+        //     title:title,
+        //     content:content,
+        //     token:tokenStr,
+        //     boardId:board,
+        //     cover:coverPic
+        // }
 
         fetch('http://localhost:8088/article/createArticle', {
             method: 'POST',
