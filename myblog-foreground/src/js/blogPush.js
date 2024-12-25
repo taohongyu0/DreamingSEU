@@ -279,6 +279,25 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("error-请求失败")
             console.error('请求失败:', error);
         });
+
+    const refreshReputationButton = document.getElementById('reputation-refresh-button');
+    refreshReputationButton.addEventListener('click', function() {
+        fetch('http://localhost:8088/user/setReputationRank',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    alert("response-网络响应失败");
+                    throw new Error('网络响应失败');
+                }
+                window.location.href = 'blogPush.html';
+                alert("排行榜已刷新");
+                return response.json();
+            })
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {   //搜索博文
@@ -312,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {   //搜索博文
 
 const adWrapper = document.getElementById('adWrapper');
 let currentIndex = 0;
-const totalAds = 3;
+const totalAds = 10;
 const scrollInterval = 3000; // 3秒
 document.getElementById('adLeftButton').innerText = '<';
 document.getElementById('adRightButton').innerText = '>';
@@ -331,13 +350,16 @@ function scrollPrev() {
     currentIndex = (currentIndex - 1 + totalAds) % totalAds;
     scrollToAd(currentIndex);
 }
+
+//推荐博文到轮播图
 document.addEventListener('DOMContentLoaded', function() {
     let articles = [];
-    fetch('http://localhost:8088/article/rankingList',{
+    fetch('http://localhost:8088/article/recommend',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: localStorage.getItem("token")
     })
         .then(response => {
             if (!response.ok) {
