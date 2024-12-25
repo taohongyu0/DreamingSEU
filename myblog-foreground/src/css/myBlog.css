@@ -188,10 +188,10 @@ header {
     filter: brightness(0.85);
 }
 .user-ban-set{
-    background-color: red;
+    background-color: green;
 }
 .user-unban-set{
-    background: green;
+    background: red;
 }
 
 #search-box {
