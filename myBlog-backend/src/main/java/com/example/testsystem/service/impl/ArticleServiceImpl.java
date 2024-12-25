@@ -3,7 +3,9 @@ package com.example.testsystem.service.impl;
 import com.example.testsystem.Util.ResponseMessage;
 import com.example.testsystem.mapper.*;
 import com.example.testsystem.model.*;
+import com.example.testsystem.model.Collection;
 import com.example.testsystem.model.supplement.ArticleInRankingList;
+import com.example.testsystem.model.supplement.BoardIdAndCount;
 import com.example.testsystem.model.toback.ArticleIdAndToken;
 import com.example.testsystem.model.toback.ArticleToBack;
 import com.example.testsystem.redis.ArticleRedis;
@@ -20,9 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -141,17 +141,66 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleInRankingList> recommend(String tokenStr) {
-//        Token userToken = tokenMapper.getTokenByTokenStr(tokenStr);
-//        if(userToken==null){
-//            return new ArrayList<>();
-//        }
-        List<ArticleInRankingList> recommendList = articleMapper.easyRecommend();
+        List<ArticleInRankingList> finalRecommendList = articleMapper.easyRecommend(10);
+        Token userToken = tokenMapper.getTokenByTokenStr(tokenStr);
+        if(userToken!=null){
+            //先计算该用户喜欢的板块
+            List<Integer>userLikesBoard = boardMapper.getUserLikesBoardId(userToken.getUserId());
+            List<BoardIdAndCount>userLikesBoardCount = new ArrayList<>();
+            for (Integer integer : userLikesBoard) {
+                if(integer==null){
+                    continue;
+                }
+                boolean isFind = false;
+                for (BoardIdAndCount boardIdAndCount : userLikesBoardCount) { //先在count数组里找一遍
+                    if (integer.equals(boardIdAndCount.getBoardId())) {
+                        isFind = true;
+                        boardIdAndCount.setCount(boardIdAndCount.getCount()+1);
+                        break;
+                    }
+                }
+                if (!isFind) {
+                    BoardIdAndCount tempBoardAndCount = new BoardIdAndCount();
+                    tempBoardAndCount.setBoardId(integer);
+                    tempBoardAndCount.setCount(1);
+                    userLikesBoardCount.add(tempBoardAndCount);
+                }
+            }
+            //如果用户没有点赞记录，直接简单推荐；如果有，按照用户喜好推荐
+            if(!userLikesBoardCount.isEmpty()){
+                //给用户最喜欢的板块排序（升序排）
+                userLikesBoardCount.sort(new Comparator<BoardIdAndCount>() {
+                    @Override
+                    public int compare(BoardIdAndCount o1, BoardIdAndCount o2) {
+                        return Integer.compare(o1.getCount(), o2.getCount());
+                    }
+                });
+                //按照n+1（用户点赞量倒数第几，n就是几）乘点击量得到推荐系数，推荐系数越大，越排前面
+                List<ArticleInRankingList> recommendList = articleMapper.easyRecommend(1000);
+                for(ArticleInRankingList article:recommendList){
+                    for(int i=0;i<userLikesBoardCount.size();i++){
+                        if(article.getBoardId()==userLikesBoardCount.get(i).getBoardId()){
+                            article.setHits(article.getHits()*(i+2));
+                            break;
+                        }
+                    }
+                }
+                //对tempRank再按照推荐系数排序(降序)
+                recommendList.sort(new Comparator<ArticleInRankingList>() {
+                    @Override
+                    public int compare(ArticleInRankingList o1, ArticleInRankingList o2) {
+                        return Integer.compare(o2.getHits(),o1.getHits());
+                    }
+                });
+                finalRecommendList = recommendList;
+            }
+        }
         int counter=0;
-        for(ArticleInRankingList article:recommendList){
+        for(ArticleInRankingList article:finalRecommendList){
             counter++;
             article.setRank(counter);
         }
-        return recommendList;
+        return finalRecommendList;
     }
 
     @Override
