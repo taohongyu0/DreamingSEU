@@ -88,6 +88,12 @@ public class ArticleController {
     }
 
     @CrossOrigin(origins = "*")
+    @PostMapping("/recommend")
+    public List<ArticleInRankingList> recommend(@RequestBody String tokenStr){
+        return articleService.recommend(tokenStr);
+    }
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/view")
     public Article viewAArticle(@RequestBody ArticleIdAndToken articleIdAndToken){
         return articleService.viewAArticle(articleIdAndToken);

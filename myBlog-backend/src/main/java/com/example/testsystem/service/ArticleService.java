@@ -21,6 +21,7 @@ public interface ArticleService {
     List<Article> searchArticle(String keyWord);
     List<Article> getArticleByBoardName(String boardName);
     List<ArticleInRankingList> getArticleRankingList();
+    List<ArticleInRankingList> recommend(String tokenStr);
     Article viewAArticle(ArticleIdAndToken articleIdAndToken);
     int coverExist(int articleId); //判断文章封面是否存在
 }
