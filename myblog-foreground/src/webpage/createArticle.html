@@ -106,21 +106,19 @@
             <option value="">加载中...</option>
         </select>
         <div class="form-group">
-<!--            <label for="content">文章内容</label>-->
-<!--            <textarea id="content" name="content" required></textarea>-->
-            <div class="editor-container">
-                <div class="toolbar">
-                    <button onclick="addBold()">B</button>
-                    <button onclick="addItalic()">I</button>
-                    <button onclick="addUnderline()">U</button>
-                </div>
-                <div class="editor-area" contenteditable="true" id="editor"></div>
-<!--                <div class="preview-area" id="preview"></div>-->
-            </div>
+            <script id="container" name="content" type="text/plain">这里写你的初始化内容</script>
+            <!-- 配置文件 -->
+            <script type="text/javascript" src="../../ueditor1.5.0/dist/utf8-php/ueditor.config.js"></script>
+            <!-- 编辑器源码文件 -->
+            <script type="text/javascript" src="../../ueditor1.5.0/dist/utf8-php/ueditor.all.js"></script>
+            <!-- 实例化编辑器 -->
+            <script type="text/javascript">
+                var ue = UE.getEditor('container');
+            </script>
         </div>
         <div class="form-group">
-            <button onclick="launch()">发布博客</button>
-<!--            <button type="submit">发布博客</button>-->
+            <button onclick="articleLaunch()">发布博客</button>
+            <!--            <button type="submit">发布博客</button>-->
         </div>
     </form>
     <div class="additional-links">
@@ -139,18 +137,36 @@
             window.location.href = 'adminManageBlog.html';
         }
     }
-    function launch(){
+    function articleLaunch(){
         const tokenStr = localStorage.getItem('token');
         const title = document.getElementById('title').value;
-        const content = document.getElementById('editor').innerHTML;
-        const board = document.getElementById('categoryDropdown').value;
-        const data = {
-            title:title,
-            content:content,
-            token:tokenStr,
-            boardId:board,
-            cover:coverPic
+        // const content = document.getElementById('editor').innerHTML;
+        // const board = document.getElementById('categoryDropdown').value;
+
+        let data;
+        // 检查编辑器是否已准备就绪
+        if (UE.getEditor('container').isReady) {
+            const content = UE.getEditor('container').getContent(); // 获取编辑器中的 HTML 内容
+            const board = document.getElementById('categoryDropdown').value;
+            data = {
+                title: title,
+                content: content,
+                token: tokenStr,
+                boardId: board,
+                cover:coverPic
+            }
+            // 其他操作
+        } else {
+            console.log('Editor is not ready yet');
         }
+
+        // const data = {
+        //     title:title,
+        //     content:content,
+        //     token:tokenStr,
+        //     boardId:board,
+        //     cover:coverPic
+        // }
 
         fetch('http://localhost:8088/article/createArticle', {
             method: 'POST',
