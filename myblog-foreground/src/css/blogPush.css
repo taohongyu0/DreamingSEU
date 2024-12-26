@@ -17,17 +17,6 @@ header {
     text-align: center;
     margin-bottom: 20px;
 }
-
-/*.post-item {*/
-/*    margin: 0 10px auto 10px;*/
-/*    border-bottom: 1px solid #ddd;*/
-/*    padding: 15px 0;*/
-/*}*/
-
-/*.post-item:last-child {*/
-/*    border-bottom: none;*/
-/*}*/
-
 .post-item {
     display: flex; /* 使用 flexbox 布局 */
     align-items: center; /* 可选：垂直居中对齐子元素 */

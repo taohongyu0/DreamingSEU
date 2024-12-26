@@ -82,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert("删除失败")
                         console.error('删除失败：', error);
                     });
-                // 注意：这里没有阻止事件的默认行为，因为按钮的默认行为就是触发点击事件
             }
         });
 
@@ -97,4 +96,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         postList.appendChild(postItem);
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    let clearPicButton = document.getElementById("clearPic");
+   clearPicButton.addEventListener('click',()=>{
+       const clearPicUrl = "http://localhost:8088/admin/clearPic";
+       fetch(clearPicUrl,{
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+           }
+       })
+           .then(response => {
+           if (!response.ok) {
+               alert("清除失败");
+               throw new Error('清除失败');
+           }
+           else{
+               alert("清除成功");
+           }
+           return response.json();
+       })
+           .catch(error => {
+               alert("清除失败")
+               console.error('清除失败：', error);
+           });
+    });
 });

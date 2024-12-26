@@ -25,4 +25,10 @@ public class AdminController {
     public ResponseMessage<String> banUser(@RequestBody String userId){
         return adminService.banUser(Integer.parseInt(userId));
     }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/clearPic")
+    public ResponseMessage<String> clearPic(){  //清理所有没用的图片
+        return adminService.clearPic();
+    }
 }

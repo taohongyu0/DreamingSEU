@@ -114,6 +114,18 @@ function produce(postData) {
         document.getElementById("collectArticleButton").classList.add('collect-unset');
     }
 
+    //显示封面图片
+    const articleCoverPicImg = document.createElement('img');
+    articleCoverPicImg.className = 'post-cover-img';
+    const postCover = document.getElementById('post-cover');
+    if(postData.cover!==null && postData.cover!==""){
+        articleCoverPicImg.src = '../pictures/articleCovers/'+postData.cover;
+        postCover.appendChild(articleCoverPicImg);
+    }
+    else{
+        postCover.style.display = 'none';
+    }
+
     produceComment(postData);
 }
 

@@ -1,0 +1,18 @@
+
+.clear-pic {
+    text-align: right; /* 可选，用于将按钮组居中 */
+}
+.clear-pic button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 5px; /* 设置按钮之间的间距 */
+}
+.clear-pic button:hover {
+    background-color: #0056b3;
+}

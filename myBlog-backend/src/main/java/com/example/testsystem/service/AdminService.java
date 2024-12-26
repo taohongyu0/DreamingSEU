@@ -8,4 +8,6 @@ import java.util.List;
 public interface AdminService {
     List<User> getAllUserBriefInfo();
     ResponseMessage<String> banUser(int userId);
+
+    ResponseMessage<String> clearPic();
 }

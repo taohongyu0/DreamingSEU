@@ -66,6 +66,7 @@ public class Article {
         this.allowComment = a.isAllowComment();
         this.comments = a.getComments();
         this.boardId = a.getBoardId();
+        this.cover = a.getCover();
     }
 
     public String getCover() {

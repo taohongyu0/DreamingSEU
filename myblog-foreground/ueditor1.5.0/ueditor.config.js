@@ -191,9 +191,9 @@
     //,saveInterval: 500
 
     //启用拖放上传
-    //,enableDragUpload: true
+    ,enableDragUpload: true
     //启用粘贴上传
-    //,enablePasteUpload: true
+    ,enablePasteUpload: true
 
     //启用图片拉伸缩放
     //,imageScaleEnabled: true

@@ -50,7 +50,7 @@ public interface ArticleMapper {
     @Select("select article.id,article.title,user.name as authorName,cover from article inner join user on article.author_id=user.id inner join board on article.board_id=board.id where board.name=#{boardName} order by modify_time desc limit 100")
     List<Article> getArticlesByBoardName(String boardName);
 
-    @Select("select id,title,author_id as authorId,content,create_time as createTime,modify_time as modifyTime,hits,likes,dislikes,allow_comment as allowComment,board_id as boardId from article where article.id=#{id}")
+    @Select("select id,title,author_id as authorId,content,create_time as createTime,modify_time as modifyTime,hits,likes,dislikes,allow_comment as allowComment,board_id as boardId,cover from article where article.id=#{id}")
     Article getArticleById(int id);
 
     @Select("select article.id,article.title,user.name as authorName from article inner join user on article.author_id=user.id where article.author_id=#{authorId} order by modify_time desc")
@@ -64,4 +64,7 @@ public interface ArticleMapper {
 
     @Select("select count(*) from comment where comment.article_id=#{articleId}")
     int getCommentAmountByArticleId(int articleId);
+
+    @Select("select article.cover from article")
+    List<String> getAllArticleCover();
 }
