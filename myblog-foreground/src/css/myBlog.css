@@ -161,9 +161,6 @@ header {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .delete-button{
-    /*margin-left: 10px;*/
-    /*color: red;*/
-    /*cursor: pointer;*/
     display: inline-block;
     padding: 5px 10px;
     background-color: red;
@@ -172,8 +169,6 @@ header {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    /*margin-left: auto;*/
-    /*margin: 0 5px 0 80%;*/
     margin-left: 15px;
     transition: background-color 0.3s ease;
 }

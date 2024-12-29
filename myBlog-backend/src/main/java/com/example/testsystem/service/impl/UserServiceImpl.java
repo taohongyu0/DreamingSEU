@@ -1,6 +1,7 @@
 package com.example.testsystem.service.impl;
 
 import com.example.testsystem.Util.MD5Example;
+import com.example.testsystem.Util.Mail;
 import com.example.testsystem.Util.ResponseMessage;
 import com.example.testsystem.mapper.*;
 import com.example.testsystem.model.Article;
@@ -15,11 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -300,6 +304,12 @@ public class UserServiceImpl implements UserService {
             userList.set(i,tempUser);
         }
         return userList;
+    }
+
+    @Override
+    public ResponseMessage<String> sendEmail(String emailAddress) throws MessagingException, GeneralSecurityException, UnsupportedEncodingException {
+        Mail mail = new Mail(emailAddress);
+        return ResponseMessage.success(mail.getVerifiCode());
     }
 
 }

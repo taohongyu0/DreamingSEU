@@ -15,11 +15,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,6 +59,12 @@ public class UserController {
     @PostMapping("/forgetPassword")
     public ResponseMessage forgetPassword(@RequestBody User user){
         return userService.forgetPassword(user);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/sendEmail")  //发送邮件，获得验证码
+    public ResponseMessage<String> sendEmail(@RequestBody String emailAddress) throws MessagingException, GeneralSecurityException, UnsupportedEncodingException {
+        return userService.sendEmail(emailAddress);
     }
 
     @CrossOrigin(origins = "*")

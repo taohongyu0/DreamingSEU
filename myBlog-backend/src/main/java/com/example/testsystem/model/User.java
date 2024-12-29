@@ -14,9 +14,18 @@ public class User {
     String passwordHash;
     String oldPasswordHash;
     String email;
+    String verifyCode;
     String profileLink;
     int roleId;
     boolean banned;
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
 
     public int getRoleId() {
         return roleId;

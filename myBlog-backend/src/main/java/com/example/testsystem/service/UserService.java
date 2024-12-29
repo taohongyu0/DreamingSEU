@@ -6,6 +6,9 @@ import com.example.testsystem.model.supplement.PersonalCenterInfo;
 import com.example.testsystem.model.toback.RoleIdAndToken;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 public interface UserService {
@@ -21,4 +24,5 @@ public interface UserService {
     ResponseMessage<String> changeInfo(User user);
     ResponseMessage<String> setReputationRank(); //设置声望
     List<PersonalCenterInfo> getReputationRank(); //获取声望
+    ResponseMessage<String> sendEmail(String emailAddress) throws MessagingException, GeneralSecurityException, UnsupportedEncodingException;
 }
