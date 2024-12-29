@@ -105,6 +105,9 @@
         </div>
         <div class="form-group">
             <button onclick="addCoverPic()">添加封面图片</button>
+            <div id="imagePreviewContainer">
+                <img id="imagePreview" src="" alt="Image Preview" style="display:none; max-width: 100%; height: auto;">
+            </div>
         </div>
         <label for="categoryDropdown">选择板块:</label>
         <select id="categoryDropdown" name="category">
@@ -272,7 +275,7 @@
                         // 解析响应体为JSON格式
                         const data = await response.json();
                         coverPic = data.data;
-                        alert("封面上传成功！");
+                        previewCover();
                     } catch (error) {
                         // 处理解析JSON时可能发生的错误
                         console.error('Error parsing JSON response:', error);
@@ -282,6 +285,12 @@
                 alert('Error: ' + error.message);
             }
         });
+    }
+
+    function previewCover(){
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.src = "../pictures/articleCovers/"+coverPic;
+        imagePreview.style.display = 'block';
     }
 </script>
 </body>
