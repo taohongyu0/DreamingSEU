@@ -41,7 +41,7 @@ public interface ArticleMapper {
     @Select("select article.id,article.title,article.hits,article.cover,article.board_id as boardId from article where article.cover is not null order by article.hits desc limit #{amount}")
     List<ArticleInRankingList> easyRecommend(int amount); //获取的文章数量
 
-    @Select("select article.id,article.title,user.name as authorName,cover from article inner join user on article.author_id=user.id order by modify_time desc limit 100")
+    @Select("select article.id,article.title,user.name as authorName,article.allow_comment as allowComment,cover from article inner join user on article.author_id=user.id order by modify_time desc limit 100")
     List<Article> summaryView();
 
     @Select("select article.id,article.title,user.name as authorName,cover from article inner join user on article.author_id=user.id  where article.title like concat('%',#{keyWord},'%') order by modify_time desc limit 100")

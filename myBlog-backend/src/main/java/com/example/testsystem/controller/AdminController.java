@@ -27,6 +27,12 @@ public class AdminController {
     }
 
     @CrossOrigin(origins = "*")
+    @PostMapping("/banArticleComment")
+    public ResponseMessage<String> banArticleComment(@RequestBody String articleId){
+        return adminService.banArticleComment(Integer.parseInt(articleId));
+    }
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/clearPic")
     public ResponseMessage<String> clearPic(){  //清理所有没用的图片
         return adminService.clearPic();

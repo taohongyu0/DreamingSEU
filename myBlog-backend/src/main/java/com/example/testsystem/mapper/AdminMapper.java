@@ -14,6 +14,11 @@ public interface AdminMapper {
 
     @Update("update user set user.banned=0 where user.id=#{userId}")
     void unbanUser(int userId);
+    @Update("update article set article.allow_comment=0 where article.id=#{articleId}")
+    void banArticleComment(int articleId);
+    @Update("update article set article.allow_comment=1 where article.id=#{articleId}")
+    void unbanArticleComment(int articleId);
+
     @Select("select id,username,name,email,banned from user where user.id=#{userId}")
     User getUserBriefInfoById(int userId);
     @Select("select id,username,name,email,banned from user where user.role_id=1")

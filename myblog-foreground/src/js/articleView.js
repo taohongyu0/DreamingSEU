@@ -126,7 +126,21 @@ function produce(postData) {
         postCover.style.display = 'none';
     }
 
-    produceComment(postData);
+    if(postData.allowComment===true){
+        produceComment(postData);
+    }
+    else{
+        const commentForm = document.getElementById('comment-form');
+        const commentInput = document.getElementById('comment-input');
+        const submitButton = document.getElementById('submit-comment-button');
+        commentInput.style.display = 'none';
+        submitButton.style.display = 'none';
+        const closeWarn = document.createElement('div');
+        closeWarn.className = 'comment-header';
+        closeWarn.textContent = '该文章的评论区已被管理员关闭';
+        commentForm.appendChild(closeWarn);
+    }
+
 }
 
 function produceComment(postData){

@@ -5,6 +5,8 @@ import com.example.testsystem.mapper.AdminMapper;
 import com.example.testsystem.mapper.ArticleMapper;
 import com.example.testsystem.model.Article;
 import com.example.testsystem.model.User;
+import com.example.testsystem.model.inRedis.ArticleInRedis;
+import com.example.testsystem.redis.ArticleRedis;
 import com.example.testsystem.service.AdminService;
 import com.example.testsystem.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class AdminServiceImpl implements AdminService {
     ArticleMapper articleMapper;
     @Autowired
     ArticleService articleService;
+    @Autowired
+    ArticleRedis articleRedis;
     @Override
     public List<User> getAllUserBriefInfo() {
         return adminMapper.getAllUserBriefInfo();
@@ -40,6 +44,23 @@ public class AdminServiceImpl implements AdminService {
         else{ //没被封号，要封禁
             adminMapper.banUser(userId);
             return ResponseMessage.success("成功封禁");
+        }
+    }
+
+    @Override
+    public ResponseMessage<String> banArticleComment(int articleId) {
+        Article article = articleMapper.getArticleById(articleId);
+        if(article.isAllowComment()){
+            adminMapper.banArticleComment(articleId);
+            article.setAllowComment(false);
+            articleRedis.saveDataToCache(articleId,new ArticleInRedis(article));
+            return ResponseMessage.success("成功关闭评论区");
+        }
+        else{
+            adminMapper.unbanArticleComment(articleId);
+            article.setAllowComment(true);
+            articleRedis.saveDataToCache(articleId,new ArticleInRedis(article));
+            return ResponseMessage.success("成功打开评论区");
         }
     }
 
