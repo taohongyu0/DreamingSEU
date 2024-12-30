@@ -78,7 +78,52 @@ fetch('http://localhost:8088/article/view', {
         console.error('Error:', error);
         alert("请求失败，请稍后重试。1");
     });
-
+let tipoffTextType; //举报文字类型（评论或博文）
+let tipoffTextId;   //举报文字id号
+function tipoff(textType,textId){
+    document.getElementById('dialogOverlay').classList.add('active');
+    tipoffTextType = textType;
+    tipoffTextId = textId;
+}
+document.getElementById('closeBtn').addEventListener('click', function() {
+    document.getElementById('dialogOverlay').classList.remove('active');
+});
+document.getElementById('confirmBtn').addEventListener('click', function() {
+    const userInput = document.getElementById('dialogTextarea').value;
+    const tipoffData = {
+        userToken:localStorage.getItem("token"),
+        textType:tipoffTextType,
+        textId:tipoffTextId,
+        content:userInput
+    }
+    fetch('http://localhost:8088/tipoff/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(tipoffData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                alert("response-网络响应失败");
+                throw new Error('网络响应失败');
+            }
+            return response.json();
+        })
+        .then(postData => {
+            if(postData.code===200){
+                alert("举报成功");
+            }
+            else{
+                alert(postData.message+"，举报失败");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("请求失败，请稍后重试。1");
+        });
+    document.getElementById('dialogOverlay').classList.remove('active');
+});
 function produce(postData) {
     // 动态生成博文内容
     document.getElementById('post-title').innerText = postData.title;
@@ -97,6 +142,9 @@ function produce(postData) {
             <div class="likes">
                 <p>收藏：</p>
                 <button class="collect-button" onclick="collectArticle()" id="collectArticleButton">${postData.collect}</button>
+            </div>
+            <div class="likes">
+                <button class="tipoff-button" onclick="tipoff(1,${postData.id})">举报</button>
             </div>
     `;
 
@@ -162,17 +210,21 @@ function produceComment(postData){
         deleteButton.className = 'delete-btn';
         deleteButton.textContent = '删除';
 
+        //创建举报按钮
+        const tipoffButton = document.createElement('button');
+        tipoffButton.className = 'tipoff-button';
+        tipoffButton.textContent = '举报';
+
 
         // 判断是否是本人发布的评论
         isOwnComment = (String(comment.authorId) === String(currentUserId));
-        // 如果不是本人发布的评论，则禁用删除按钮
+        // 如果不是本人发布的评论，则禁用删除按钮，添加举报按钮
         if (!isOwnComment) {
             deleteButton.disabled = true;
             deleteButton.title = '只有作者可以删除此评论';
         } else {
             // 为删除按钮添加点击事件监听器
             deleteButton.addEventListener('click', () => {
-                alert("there");
                 // 在这里添加删除评论的逻辑，例如从数据库或状态中移除评论
                 fetch('http://localhost:8088/comment/delete', {
                     method: 'POST',
@@ -225,6 +277,7 @@ function produceComment(postData){
             commentDiv.innerHTML = `
         <div class="comment-header">
             `+commentUniversalHTML+`
+            <button class="tipoff-button" onclick="tipoff(2,${comment.id})">举报</button>
         </div>
         <p>${comment.content}</p>
     `;
