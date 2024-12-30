@@ -7,6 +7,7 @@ public class Comment {
     int id;
     int authorId;
     String authorName; //不在数据库里
+    String authorUsername;
     int articleId;
     String content;
     LocalDateTime launchTime;
@@ -24,6 +25,14 @@ public class Comment {
         this.launchTime = LocalDateTime.now();
         this.likes = 0;
         this.dislikes = 0;
+    }
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 
     public int getLikeExist() {

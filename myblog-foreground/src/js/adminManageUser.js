@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const banButton = document.createElement('button');
         banButton.className = 'delete-button'; // 可以为删除按钮添加一个特定的类名用于样式和脚本
         if(post.banned===false){
-            banButton.textContent = '封禁账号';
+            banButton.textContent = '未封禁';
             banButton.classList.remove('user-unban-set');
             banButton.classList.add('user-ban-set');
         }
         else{
-            banButton.textContent = '解封账号';
+            banButton.textContent = '封禁中';
             banButton.classList.remove('user-ban-set');
             banButton.classList.add('user-unban-set');
         }
@@ -87,12 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(data=>{
                     if(data.data==="成功解封"){
-                        banButton.textContent = '封禁账号';
+                        banButton.textContent = '未封禁';
                         banButton.classList.remove('user-unban-set');
                         banButton.classList.add('user-ban-set');
                     }
                     else if(data.data==="成功封禁"){
-                        banButton.textContent = '解封账号';
+                        banButton.textContent = '封禁中';
                         banButton.classList.remove('user-ban-set');
                         banButton.classList.add('user-unban-set');
                     }

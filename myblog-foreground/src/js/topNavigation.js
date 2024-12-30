@@ -14,6 +14,7 @@ else if(userRoleId==="2"){
         { text: '管理博文', href: '#home' },
         { text: '发布公告', href: '#about' },
         { text: '管理用户', href: '#manageUser'},
+        { text: '用户举报', href: '#'},
         { text: '个人中心', href: '#services' },
         { text: '退出登录', href: '#contact' }
     ];
@@ -74,6 +75,9 @@ document.querySelectorAll('.navbar a').forEach(link => {  //顶部悬浮导航�
             else if(this.textContent==="管理用户"){
                 manageUser();
             }
+            else if(this.textContent==="用户举报"){
+                userTipoff();
+            }
             else if(this.textContent==="个人中心"){
                 goToPersonalCenter();
             }
@@ -81,8 +85,11 @@ document.querySelectorAll('.navbar a').forEach(link => {  //顶部悬浮导航�
     });
 });
 
+function userTipoff(){
+    window.location.href = '../webpage/adminManageTipoff.html';
+}
 function manageUser(){
-    window.location.href = '../webpage/adminManageUser.html'
+    window.location.href = '../webpage/adminManageUser.html';
 }
 
 function goToPersonalCenter(){

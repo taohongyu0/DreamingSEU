@@ -15,4 +15,7 @@ public interface BoardMapper {
 
     @Select("select * from board where board.name=#{name}")
     Board getBoardByName(String name);
+
+    @Select("select article.board_id from likes inner join article on likes.text_id=article.id where likes.text_type=1 and likes.user_id=#{userId}")
+    List<Integer> getUserLikesBoardId(int userId);
 }

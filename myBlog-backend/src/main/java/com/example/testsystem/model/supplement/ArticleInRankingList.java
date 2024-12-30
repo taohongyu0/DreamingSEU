@@ -6,6 +6,15 @@ public class ArticleInRankingList {
     String title;
     int hits;
     String cover;
+    int boardId;
+
+    public int getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(int boardId) {
+        this.boardId = boardId;
+    }
 
     public String getCover() {
         return cover;

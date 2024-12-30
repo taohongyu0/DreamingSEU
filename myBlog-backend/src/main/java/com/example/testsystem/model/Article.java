@@ -10,6 +10,7 @@ public class Article {
     int id;
     String title;
     int authorId;
+    String authorUsername;
     String authorName;  //这个参数有时会显示，但不往数据库里传
     String content;
     LocalDateTime createTime;
@@ -66,6 +67,15 @@ public class Article {
         this.allowComment = a.isAllowComment();
         this.comments = a.getComments();
         this.boardId = a.getBoardId();
+        this.cover = a.getCover();
+    }
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 
     public String getCover() {

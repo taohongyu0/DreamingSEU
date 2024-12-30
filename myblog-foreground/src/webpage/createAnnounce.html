@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>公告编辑与发布</title>
     <link rel="stylesheet" href="../css/richText.css">
+    <link rel="stylesheet" href="../css/background.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -91,9 +92,14 @@
         #coverPic {
             display: none;
         }
+        #imagePreviewContainer {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
+<div class="background-layer"></div>
 <div class="container">
     <h1>编辑并发布公告</h1>
     <form id="blogForm">
@@ -103,6 +109,9 @@
         </div>
         <div class="form-group">
             <button onclick="addCoverPic()">添加封面图片</button>
+            <div id="imagePreviewContainer">
+                <img id="imagePreview" src="" alt="Image Preview" style="display:none; max-width: 100%; height: auto;">
+            </div>
         </div>
         <label for="categoryDropdown">选择板块:</label>
         <select id="categoryDropdown" name="category">
@@ -123,7 +132,6 @@
         </div>
         <div class="form-group">
             <button onclick="launch()">发布公告</button>
-<!--            <button type="submit">发布博客</button>-->
         </div>
     </form>
     <div class="additional-links">
@@ -254,7 +262,8 @@
                         // 解析响应体为JSON格式
                         const data = await response.json();
                         coverPic = data.data;
-                        alert("封面上传成功！");
+                        // alert("封面上传成功！");
+                        previewCover();
                     } catch (error) {
                         // 处理解析JSON时可能发生的错误
                         console.error('Error parsing JSON response:', error);
@@ -264,6 +273,12 @@
                 alert('Error: ' + error.message);
             }
         });
+    }
+
+    function previewCover(){
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.src = "../pictures/articleCovers/"+coverPic;
+        imagePreview.style.display = 'block';
     }
 
 

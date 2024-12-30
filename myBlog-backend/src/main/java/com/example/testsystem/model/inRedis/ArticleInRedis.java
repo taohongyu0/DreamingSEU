@@ -22,6 +22,7 @@ public class ArticleInRedis {
     boolean allowComment; //是否允许评论
     List<Comment> comments; //评论的列表
     int boardId;
+    String cover;
 
     public ArticleInRedis(){}
 
@@ -43,6 +44,15 @@ public class ArticleInRedis {
         this.allowComment = article.isAllowComment(); //是否允许评论
         this.comments = article.getComments(); //评论的列表
         this.boardId = article.getBoardId();
+        this.cover = article.getCover();
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public int getDislikes() {

@@ -6,8 +6,10 @@
     <title>博文详情</title>
     <link rel="stylesheet" href="../css/articleView.css">
     <link rel="stylesheet" href="../css/topNavigation.css">
+    <link rel="stylesheet" href="../css/background.css">
 </head>
 <body>
+<div class="background-layer"></div>
 <nav class="navbar">
     <ul id="navList">
     </ul>
@@ -21,14 +23,26 @@
 
     </div>
     <div class="post-meta" id="post-meta"></div>
+    <div class="post-cover" id="post-cover"></div>
     <div class="post-content" id="post-content"></div>
     <div class="post-stats" id="post-stats"></div>
-    <div class="comment-form">
+    <div class="comment-form" id="comment-form">
         <textarea id="comment-input" placeholder="在这里输入你的评论..."></textarea>
-        <button onclick="submitComment()">发表评论</button>
+        <button id="submit-comment-button" onclick="submitComment()">发表评论</button>
     </div>
     <div class="comment-section" id="comment-section">
         <!-- 评论将会动态插入到这里 -->
+    </div>
+</div>
+
+<div id="dialogOverlay" class="overlay">
+    <div class="dialog" role="dialog" aria-labelledby="dialogTitle" aria-modal="true">
+        <div class="dialog-content">
+            <h2 id="dialogTitle">请在下方输入举报理由</h2>
+            <textarea id="dialogTextarea" rows="4" cols="50"></textarea>
+            <button class="delete-btn" id="confirmBtn">确认举报</button>
+            <button class="cancel-button" id="closeBtn">取消</button>
+        </div>
     </div>
 </div>
 

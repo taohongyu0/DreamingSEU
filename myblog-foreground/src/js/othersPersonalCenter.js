@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('header-title').innerText = "欢迎来到"+data.name+"的个人中心";
             document.getElementById('username').innerText = "@"+data.username;
             document.getElementById('name').innerText = data.name;
-            document.getElementById('reputation').innerText = data.reputation;
+            document.getElementById('reputation').innerText = data.reputation.toFixed(1);
             document.getElementById('hits').innerText = data.totalHits;
             //document.getElementById('loginTime').innerText = data.loginTimeChinese;
         })

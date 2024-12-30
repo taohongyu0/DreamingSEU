@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 listItem.addEventListener('click', function(event) {
                     localStorage.setItem('viewOthersUserId', user.id);
                 });
-                listItem.textContent = `${user.rank}. ${user.title} - 声望: ${user.views}`;
+                listItem.textContent = `${user.rank}. ${user.title} - 声望: ${user.views.toFixed(1)}`;
                 switch (user.rank) {
                     case 1:
                         listItem.style.color = '#8B0000';
@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {   //搜索博文
 const adWrapper = document.getElementById('adWrapper');
 let currentIndex = 0;
 const totalAds = 10;
-const scrollInterval = 3000; // 3秒
+const scrollInterval = 5000; // 3秒
 document.getElementById('adLeftButton').innerText = '<';
 document.getElementById('adRightButton').innerText = '>';
 function scrollToAd(index) {

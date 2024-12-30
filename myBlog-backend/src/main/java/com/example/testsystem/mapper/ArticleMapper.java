@@ -38,10 +38,10 @@ public interface ArticleMapper {
     @Select("select article.id,article.title,article.hits,article.cover from article where date(article.modify_time) >= date_sub(now(),interval 7 day) order by article.hits desc limit 10")
     List<ArticleInRankingList> getArticleRankingList();
 
-    @Select("select article.id,article.title,article.hits,article.cover from article where article.cover is not null order by article.hits desc limit 10")
-    List<ArticleInRankingList> easyRecommend();
+    @Select("select article.id,article.title,article.hits,article.cover,article.board_id as boardId from article where article.cover is not null order by article.hits desc limit #{amount}")
+    List<ArticleInRankingList> easyRecommend(int amount); //获取的文章数量
 
-    @Select("select article.id,article.title,user.name as authorName,cover from article inner join user on article.author_id=user.id order by modify_time desc limit 100")
+    @Select("select article.id,article.title,user.name as authorName,article.allow_comment as allowComment,cover from article inner join user on article.author_id=user.id order by modify_time desc limit 100")
     List<Article> summaryView();
 
     @Select("select article.id,article.title,user.name as authorName,cover from article inner join user on article.author_id=user.id  where article.title like concat('%',#{keyWord},'%') order by modify_time desc limit 100")
@@ -50,7 +50,7 @@ public interface ArticleMapper {
     @Select("select article.id,article.title,user.name as authorName,cover from article inner join user on article.author_id=user.id inner join board on article.board_id=board.id where board.name=#{boardName} order by modify_time desc limit 100")
     List<Article> getArticlesByBoardName(String boardName);
 
-    @Select("select id,title,author_id as authorId,content,create_time as createTime,modify_time as modifyTime,hits,likes,dislikes,allow_comment as allowComment,board_id as boardId from article where article.id=#{id}")
+    @Select("select article.id,article.title,article.author_id as authorId,article.content,article.create_time as createTime,article.modify_time as modifyTime,article.hits,article.likes,article.dislikes,article.allow_comment as allowComment,article.board_id as boardId,article.cover,user.username as authorUsername,user.name as authorName from article inner join user on user.id=article.author_id where article.id=#{id}")
     Article getArticleById(int id);
 
     @Select("select article.id,article.title,user.name as authorName from article inner join user on article.author_id=user.id where article.author_id=#{authorId} order by modify_time desc")
@@ -64,4 +64,7 @@ public interface ArticleMapper {
 
     @Select("select count(*) from comment where comment.article_id=#{articleId}")
     int getCommentAmountByArticleId(int articleId);
+
+    @Select("select article.cover from article")
+    List<String> getAllArticleCover();
 }
