@@ -6,11 +6,17 @@ public class Tipoff {
     String userToken;
     int id;
     int userId;  //举报者
-    int textType;  //举报的文字类型
-    int textId;  //举报的文字id
+    int defendantUserId; //被举报者
+    String username;
+    String defendantUsername; //被举报者的用户名
+    int textType;  //举报的文段类型
+    int textId;  //举报的文段id
+    int articleId; //对应的博文id
+    String articleTitle; //对应的博文名称
     LocalDateTime time; //用户举报时间
-    String content;
+    String content; //举报者填写的内容
     boolean isSolve; //是否解决
+    String commentContent;
 
     public Tipoff(){}
 
@@ -21,6 +27,54 @@ public class Tipoff {
         this.time = LocalDateTime.now();
         this.content = content;
         this.isSolve = false;
+    }
+
+    public int getDefendantUserId() {
+        return defendantUserId;
+    }
+
+    public void setDefendantUserId(int defendantUserId) {
+        this.defendantUserId = defendantUserId;
+    }
+
+    public String getDefendantUsername() {
+        return defendantUsername;
+    }
+
+    public void setDefendantUsername(String defendantUsername) {
+        this.defendantUsername = defendantUsername;
+    }
+
+    public int getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
+    }
+
+    public String getArticleTitle() {
+        return articleTitle;
+    }
+
+    public void setArticleTitle(String articleTitle) {
+        this.articleTitle = articleTitle;
+    }
+
+    public String getCommentContent() {
+        return commentContent;
+    }
+
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUserToken() {

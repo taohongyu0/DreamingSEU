@@ -53,6 +53,15 @@ header {
     color: #666;
     font-size: 0.9em;
 }
+.post-summary-link {
+    color: #666;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+.post-summary-link:hover{
+    text-decoration: underline;
+}
+
 .additional-links {
     text-align: center; /* 可选，用于将按钮组居中 */
 }

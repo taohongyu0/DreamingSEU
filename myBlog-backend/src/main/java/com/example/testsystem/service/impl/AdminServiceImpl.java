@@ -48,6 +48,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public ResponseMessage<String> banU1(int userId) {
+        User tempUser = adminMapper.getUserBriefInfoById(userId);
+        if(tempUser==null){
+            return ResponseMessage.fail(500,"用户不存在");
+        }
+        adminMapper.banUser(userId);
+        return ResponseMessage.success("成功封禁");
+    }
+
+    @Override
     public ResponseMessage<String> banArticleComment(int articleId) {
         Article article = articleMapper.getArticleById(articleId);
         if(article.isAllowComment()){
@@ -62,6 +72,15 @@ public class AdminServiceImpl implements AdminService {
             articleRedis.saveDataToCache(articleId,new ArticleInRedis(article));
             return ResponseMessage.success("成功打开评论区");
         }
+    }
+
+    @Override
+    public ResponseMessage<String> banArticleComment1(int articleId) {
+        Article article = articleMapper.getArticleById(articleId);
+        adminMapper.banArticleComment(articleId);
+        article.setAllowComment(false);
+        articleRedis.saveDataToCache(articleId,new ArticleInRedis(article));
+        return ResponseMessage.success("成功关闭评论区");
     }
 
     @Override

@@ -6,6 +6,8 @@ import com.example.testsystem.service.TipoffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tipoff")
 public class TipoffController {
@@ -22,5 +24,17 @@ public class TipoffController {
     @PostMapping("/solve")
     ResponseMessage<String> solve(@RequestBody String id){
         return tipoffService.solve(Integer.parseInt(id));
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("viewAll")
+    List<Tipoff> viewAll(){
+        return tipoffService.viewAll();
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("viewAllUnsolved")
+    List<Tipoff> viewAllUnsolved(){
+        return tipoffService.viewAllUnsolved();
     }
 }

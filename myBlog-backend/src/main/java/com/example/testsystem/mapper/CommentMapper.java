@@ -35,7 +35,7 @@ public interface CommentMapper {
     List<Comment> getCommentByArticleId(int articleId);
     @Select("select comment.id,comment.author_id as authorId,comment.article_id as articleId,comment.content,comment.launch_time as launchTime,comment.likes,comment.dislikes,user.name as authorName,(select count(*) from likes where likes.user_id=#{viewerId} and likes.text_type=2 and likes.text_id=comment.id) as likeExist,(select count(*) from dislikes where dislikes.user_id=#{viewerId} and dislikes.text_type=2 and dislikes.text_id=comment.id) as dislikeExist from comment inner join user on comment.author_id=user.id where comment.article_id=#{articleId}")
     List<Comment> getCommentByArticleIdAndViewerId(int articleId,int viewerId);
-    @Select("select comment.id,comment.author_id as authorId,comment.article_id as articleId,comment.content,comment.launch_time as launchTime,comment.likes,user.name as authorName from comment inner join user on comment.author_id=user.id where comment.id=#{commentId}")
+    @Select("select comment.id,comment.author_id as authorId,comment.article_id as articleId,comment.content,comment.launch_time as launchTime,comment.likes,user.name as authorName,user.username as authorUsername from comment inner join user on comment.author_id=user.id where comment.id=#{commentId}")
     Comment getCommentByCommentId(int commentId);
 
 }
