@@ -6,6 +6,7 @@
     <title>公告编辑与发布</title>
     <link rel="stylesheet" href="../css/richText.css">
     <link rel="stylesheet" href="../css/background.css">
+    <link rel="stylesheet" href="../css/topNavigation.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -100,6 +101,10 @@
 </head>
 <body>
 <div class="background-layer"></div>
+<nav class="navbar" id="navbar">
+    <ul id="navList">
+    </ul>
+</nav>
 <div class="container">
     <h1>编辑并发布公告</h1>
     <form id="blogForm">
@@ -140,6 +145,7 @@
     <div class="response" id="response"></div>
 </div>
 <script src="../js/richText.js"></script>
+<script src="../js/topNavigation.js"></script>
 <script>
     let coverPic = "";
     function backToIndex(){

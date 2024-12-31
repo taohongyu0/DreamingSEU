@@ -20,9 +20,21 @@ else if(userRoleId==="2"){
     ];
 }
 
-
+const iconFastDFSUrl = "http://localhost:8888/group1/M00/00/00/rBQAAmdzqsSAQA-bAAFxUf9eevQ918.png";
 // 获取要插入列表项的ul元素
+// const navbar = document.getElementById('navbar');
 const navList = document.getElementById('navList');
+const ourIcon = document.createElement('div');
+ourIcon.className = 'ourIcon-pic';
+const ourIconPic = document.createElement('img');
+ourIconPic.src = iconFastDFSUrl;
+// 监听图像的错误事件
+ourIconPic.onerror = function() {
+    // 图像加载失败时执行的代码
+    ourIconPic.src = '../testPhoto/icon.png'
+};
+ourIcon.appendChild(ourIconPic);
+navList.appendChild(ourIcon);
 
 // 动态创建并插入列表项
 navItems.forEach(item => {
