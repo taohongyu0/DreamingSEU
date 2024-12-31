@@ -50,6 +50,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ResponseMessage<String> createArticle(ArticleToBack articleToBack) {
+        if(articleToBack.getContent().length()>21000){
+            return ResponseMessage.fail(500,"字数超出最大允许值，服务器拒绝保存！");
+        }
         Token userToken = tokenMapper.getTokenByTokenStr(articleToBack.getToken());
         //先检查token是否有效
         if(userToken==null){
