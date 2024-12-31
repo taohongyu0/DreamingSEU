@@ -7,6 +7,7 @@ import com.example.testsystem.mapper.*;
 import com.example.testsystem.model.Article;
 import com.example.testsystem.model.Token;
 import com.example.testsystem.model.User;
+import com.example.testsystem.model.VerifyCode;
 import com.example.testsystem.model.supplement.PersonalCenterInfo;
 import com.example.testsystem.model.toback.RoleIdAndToken;
 import com.example.testsystem.redis.ArticleRedis;
@@ -24,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -51,6 +53,8 @@ public class UserServiceImpl implements UserService {
     ArticleRedis articleRedis;
     @Autowired
     ReputationService reputationService;
+    @Autowired
+    VerifyCodeMapper verifyCodeMapper;
 //    public String UPLOADED_FOLDER = "F:\\Grade4Term1\\Java\\MyBlog-2\\myblog-foreground\\src\\pictures\\userProfiles";
     public String UPLOADED_FOLDER = "../myblog-foreground/src/pictures/userProfiles";
 
@@ -130,8 +134,20 @@ public class UserServiceImpl implements UserService {
     public ResponseMessage<String> forgetPassword(User user) {
         int username_email = userMapper.verifyUsernameAndEmail(user);
         if(username_email == 1){
+            //检查邮箱和验证码是否匹配，验证码是否过期
+            VerifyCode verifyCode = verifyCodeMapper.get(user.getEmail(),user.getVerifyCode());
+            if(verifyCode==null || !verifyCode.isValid()){
+                return ResponseMessage.fail(500,"验证码无效");
+            }
+            Duration duration = Duration.between(verifyCode.getProduceTime(), LocalDateTime.now());
+            long minutes = duration.toMinutes();
+            if(minutes>10){
+                return ResponseMessage.fail(500,"验证码超时，请重新发送");
+            }
             user.setPasswordHash(md5.getMD5Hash(user.getPasswordHash()));
             userMapper.updatePassword(user);
+            //成功之前，需要将之前的该邮箱之前的验证码全设成无效
+            verifyCodeMapper.setInvalidByEmail(user.getEmail());
             return ResponseMessage.success("成功");
         }
         return ResponseMessage.fail(500,"用户名或对应邮箱有误");
@@ -309,7 +325,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseMessage<String> sendEmail(String emailAddress) throws MessagingException, GeneralSecurityException, UnsupportedEncodingException {
         Mail mail = new Mail(emailAddress);
-        return ResponseMessage.success(mail.getVerifiCode());
+        VerifyCode verifyCode = verifyCodeMapper.getByEmail(emailAddress);
+        if(verifyCode!=null){
+            Duration duration = Duration.between(verifyCode.getProduceTime(), LocalDateTime.now());
+            long second = duration.toSeconds();
+            if(second<30){  //操作两次间隔需要大于30秒
+                return ResponseMessage.fail(500,"请求太频繁，请稍后重试");
+            }
+        }
+        //增加之前，,需要删除该邮箱对应的所有验证码
+        verifyCodeMapper.deleteByEmail(emailAddress);
+        verifyCodeMapper.add(new VerifyCode(emailAddress,mail.getVerifiCode()));
+        return ResponseMessage.success("success");
     }
 
 }

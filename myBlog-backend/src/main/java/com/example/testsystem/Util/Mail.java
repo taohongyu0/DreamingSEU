@@ -93,7 +93,7 @@ public class Mail {
         //邮件标题
         mimeMessage.setSubject("【吹梦到东南】 验证码");
 
-        String content = "【吹梦到东南】您好！欢迎使用“吹梦到东南”博客系统！您的验证码是：" + this.verifiCode + "。如非本人操作，请检查账号安全！";
+        String content = "【吹梦到东南】您好！欢迎使用“吹梦到东南”博客系统！您的验证码是：" + this.verifiCode + "。该验证码仅在10分钟内有效，请尽快完成验证。如非本人操作，请检查账号安全！";
 
         //邮件内容
         mimeMessage.setContent(content, "text/html;charset=UTF-8");
