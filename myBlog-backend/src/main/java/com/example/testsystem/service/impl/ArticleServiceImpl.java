@@ -47,9 +47,17 @@ public class ArticleServiceImpl implements ArticleService {
     BoardMapper boardMapper;
     @Autowired
     ArticleRedis articleRedis;
+    @Autowired
+    UserService userService;
 
     @Override
     public ResponseMessage<String> createArticle(ArticleToBack articleToBack) {
+        if(articleToBack.getContent()==null || Objects.equals(articleToBack.getContent(), "")){
+            return ResponseMessage.fail(500,"不能发表内容为空的博文！");
+        }
+        if(articleToBack.getBoardId()==0){
+            return ResponseMessage.fail(500,"请选择一个板块！");
+        }
         if(articleToBack.getContent().length()>21000){
             return ResponseMessage.fail(500,"字数超出最大允许值，服务器拒绝保存！");
         }
@@ -214,8 +222,14 @@ public class ArticleServiceImpl implements ArticleService {
         //增加一个点击量
         articleMapper.addHit(id);
 
+        //把作者头像放进去
+        tempArticle.setAuthorProfile(userService.getUserProfile(tempArticle.getAuthorId()));
+
         //把评论放到文章中
         List<Comment>comments = commentMapper.getCommentByArticleIdAndViewerId(id,tempToken.getUserId());
+        for(Comment comment:comments){
+            comment.setAuthorProfile(userService.getUserProfile(comment.getAuthorId()));
+        }
         tempArticle.setComments(comments);
 
         User author = userMapper.getUserById(tempArticle.getAuthorId());

@@ -25,4 +25,5 @@ public interface UserService {
     ResponseMessage<String> setReputationRank(); //设置声望
     List<PersonalCenterInfo> getReputationRank(); //获取声望
     ResponseMessage<String> sendEmail(String emailAddress) throws MessagingException, GeneralSecurityException, UnsupportedEncodingException;
+    String getUserProfile(int id);
 }

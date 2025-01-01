@@ -313,17 +313,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<PersonalCenterInfo> getReputationRank() {
-        List<PersonalCenterInfo> userList = userMapper.getReputationRank();
+        List<PersonalCenterInfo> userList = userMapper.getReputationRankOnlyRole1();
         for(int i=0;i<userList.size();i++){
             PersonalCenterInfo tempUser = userList.get(i);
             tempUser.setRank(i+1);
-            userList.set(i,tempUser);
         }
         return userList;
     }
 
     @Override
     public ResponseMessage<String> sendEmail(String emailAddress) throws MessagingException, GeneralSecurityException, UnsupportedEncodingException {
+        if(emailAddress==null || emailAddress.isEmpty()){
+            return ResponseMessage.fail(500,"邮箱未输入");
+        }
         Mail mail = new Mail(emailAddress);
         VerifyCode verifyCode = verifyCodeMapper.getByEmail(emailAddress);
         if(verifyCode!=null){
@@ -337,6 +339,21 @@ public class UserServiceImpl implements UserService {
         verifyCodeMapper.deleteByEmail(emailAddress);
         verifyCodeMapper.add(new VerifyCode(emailAddress,mail.getVerifiCode()));
         return ResponseMessage.success("success");
+    }
+
+    @Override
+    public String getUserProfile(int id) {
+        // 指定要检查的文件路径
+        String filePath = UPLOADED_FOLDER+"/"+id +".png";
+        // 创建File对象
+        File file = new File(filePath);
+        // 判断文件是否存在
+        if(file.exists()){
+            return "../pictures/userProfiles/"+id +".png";
+        }
+        else{
+            return "../pictures/userProfiles/default.png";
+        }
     }
 
 }

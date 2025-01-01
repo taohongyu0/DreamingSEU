@@ -161,7 +161,8 @@
         // 检查编辑器是否已准备就绪
         if (UE.getEditor('container').isReady) {
             const content = UE.getEditor('container').getContent(); // 获取编辑器中的 HTML 内容
-            const board = document.getElementById('categoryDropdown').value;
+            let board = "-1";
+            board = document.getElementById('categoryDropdown').value;
             data = {
                 title: title,
                 content: content,
@@ -172,6 +173,10 @@
             // 其他操作
         } else {
             console.log('Editor is not ready yet');
+        }
+        if(title===''){
+            alert("博文信息不完整，请填写完整后再发布！");
+            return;
         }
 
         fetch('http://localhost:8088/article/createArticle', {

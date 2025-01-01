@@ -12,6 +12,7 @@ public class Article {
     int authorId;
     String authorUsername;
     String authorName;  //这个参数有时会显示，但不往数据库里传
+    String authorProfile; //作者头像路径
     String content;
     LocalDateTime createTime;
     LocalDateTime modifyTime;
@@ -68,6 +69,15 @@ public class Article {
         this.comments = a.getComments();
         this.boardId = a.getBoardId();
         this.cover = a.getCover();
+    }
+
+
+    public String getAuthorProfile() {
+        return authorProfile;
+    }
+
+    public void setAuthorProfile(String authorProfile) {
+        this.authorProfile = authorProfile;
     }
 
     public String getAuthorUsername() {

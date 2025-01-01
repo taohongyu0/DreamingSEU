@@ -12,6 +12,16 @@ public class PersonalCenterInfo {
     String name; //昵称
     int rank; //排名
     int id;
+    int roleId;
+
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
 
     public int getRank() {
         return rank;

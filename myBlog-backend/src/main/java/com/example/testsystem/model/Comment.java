@@ -8,6 +8,7 @@ public class Comment {
     int authorId;
     String authorName; //不在数据库里
     String authorUsername;
+    String authorProfile;
     int articleId;
     String content;
     LocalDateTime launchTime;
@@ -25,6 +26,15 @@ public class Comment {
         this.launchTime = LocalDateTime.now();
         this.likes = 0;
         this.dislikes = 0;
+    }
+
+
+    public String getAuthorProfile() {
+        return authorProfile;
+    }
+
+    public void setAuthorProfile(String authorProfile) {
+        this.authorProfile = authorProfile;
     }
 
     public String getAuthorUsername() {

@@ -50,6 +50,9 @@ public interface UserMapper {
     @Select("select user.id from user")
     List<PersonalCenterInfo> getAllUserId();
 
-    @Select("select user.id,user.username,user.name,user.reputation from user where user.id!=-1 order by user.reputation desc limit 10")
+    @Select("select user.id,user.username,user.name,user.reputation,user.role_id as roleId from user order by user.reputation desc limit 10")
     List<PersonalCenterInfo> getReputationRank();
+
+    @Select("select user.id,user.username,user.name,user.reputation,user.role_id as roleId from user where user.role_id=1 order by user.reputation desc limit 10")
+    List<PersonalCenterInfo> getReputationRankOnlyRole1();
 }

@@ -127,6 +127,8 @@ document.getElementById('confirmBtn').addEventListener('click', function() {
 function produce(postData) {
     // 动态生成博文内容
     document.getElementById('post-title').innerText = postData.title;
+    const authorProfilePic = document.getElementById('author-profile-img');
+    authorProfilePic.src = postData.authorProfile;
     document.getElementById('post-meta').innerText = `作者: ${postData.authorName} | 创作时间: ${new Date(postData.createTime).toLocaleString()} | 修改时间: ${new Date(postData.modifyTime).toLocaleString()}`;
     document.getElementById('post-content').innerHTML = postData.content;
     document.getElementById('post-stats').innerHTML = `
@@ -261,6 +263,11 @@ function produceComment(postData){
         const likeCommentButtonId = "likeCommentButton"+comment.id;
         const dislikeCommentButtonId = "dislikeCommentButton"+comment.id;
         const commentUniversalHTML = `
+            <span>
+                <div class="author-profile">
+                    <img class="author-profile-img" src=${comment.authorProfile} alt="用户头像">
+                </div>
+            </span>
             <span>${comment.authorName}</span>
             <span>${new Date(comment.launchTime).toLocaleString()}</span>
             <div class="likes">
