@@ -38,7 +38,7 @@ public interface ArticleMapper {
     @Select("select article.id,article.title,article.hits,article.cover from article where date(article.modify_time) >= date_sub(now(),interval 7 day) order by article.hits desc limit 10")
     List<ArticleInRankingList> getArticleRankingList();
 
-    @Select("select article.id,article.title,article.hits,article.cover,article.board_id as boardId from article where (article.cover is not null and article.cover!='') order by article.hits desc limit #{amount}")
+    @Select("select article.id,article.title,article.hits,article.cover,article.board_id as boardId,article.modify_time as modifyTime from article where (article.cover is not null and article.cover!='') order by article.hits desc limit #{amount}")
     List<ArticleInRankingList> easyRecommend(int amount); //获取的文章数量
 
     @Select("select article.id,article.title,user.name as authorName,article.allow_comment as allowComment,cover from article inner join user on article.author_id=user.id order by modify_time desc limit 100")

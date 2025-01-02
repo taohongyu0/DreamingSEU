@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -194,6 +195,23 @@ public class ArticleServiceImpl implements ArticleService {
                             article.setHits(article.getHits()*(i+2));
                             break;
                         }
+                    }
+                }
+                //按照时间（修改日期到现在过了多少天，时间越短乘的系数越高）
+                for(ArticleInRankingList article:recommendList){
+                    Duration duration = Duration.between(article.getModifyTime(),LocalDateTime.now());
+                    long day = duration.toDays();
+                    if(day<=1){
+                        article.setHits(article.getHits()*10);
+                    }
+                    else if(day<=3){
+                        article.setHits(article.getHits()*6);
+                    }
+                    else if(day<=7){
+                        article.setHits(article.getHits()*3);
+                    }
+                    else if(day<=30){
+                        article.setHits(article.getHits()*2);
                     }
                 }
                 //对tempRank再按照推荐系数排序(降序)

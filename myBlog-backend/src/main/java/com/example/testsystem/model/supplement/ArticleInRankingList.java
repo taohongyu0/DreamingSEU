@@ -1,5 +1,7 @@
 package com.example.testsystem.model.supplement;
 
+import java.time.LocalDateTime;
+
 public class ArticleInRankingList {
     int id;
     int rank;
@@ -7,6 +9,15 @@ public class ArticleInRankingList {
     int hits;
     String cover;
     int boardId;
+    LocalDateTime modifyTime;
+
+    public LocalDateTime getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(LocalDateTime modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
     public int getBoardId() {
         return boardId;
