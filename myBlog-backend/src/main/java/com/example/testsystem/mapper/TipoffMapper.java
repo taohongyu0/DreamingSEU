@@ -1,10 +1,7 @@
 package com.example.testsystem.mapper;
 
 import com.example.testsystem.model.Tipoff;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -12,6 +9,9 @@ import java.util.List;
 public interface TipoffMapper {
     @Insert("insert into tipoff (user_id,text_type,text_id,time,content,is_solve) values (#{userId},#{textType},#{textId},#{time},#{content},#{isSolve})")
     void addTipoff(Tipoff tipoff);
+
+    @Delete("delete from tipoff where tipoff.text_type=#{textType} and tipoff.text_id=#{textId}")
+    void deleteTipoff(int textType,int textId);
 
     @Update("update tipoff set tipoff.is_solve=1 where tipoff.id=#{id}")
     void solveTipoff(int id);

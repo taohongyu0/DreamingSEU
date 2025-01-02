@@ -50,6 +50,8 @@ public class ArticleServiceImpl implements ArticleService {
     ArticleRedis articleRedis;
     @Autowired
     UserService userService;
+    @Autowired
+    TipoffMapper tipoffMapper;
 
     @Override
     public ResponseMessage<String> createArticle(ArticleToBack articleToBack) {
@@ -79,8 +81,12 @@ public class ArticleServiceImpl implements ArticleService {
             for(int i=0;i<commentList.size();i++){
                 likesMapper.deleteLikeRecordByTextTypeAndTextId(2,commentList.get(i).getId()); //删除评论对应的点赞记录
                 dislikesMapper.deleteDislikeRecordByTextTypeAndTextId(2,commentList.get(i).getId()); //删除评论对应的点踩记录
+                //删除相关举报
+                tipoffMapper.deleteTipoff(2,commentList.get(i).getId());
             }
         }
+        //删除相关举报
+        tipoffMapper.deleteTipoff(1,articleId);
         commentMapper.deleteCommentByArticleId(articleId); //删完评论对应点赞记录后，再删评论
         likesMapper.deleteLikeRecordByTextTypeAndTextId(1,articleId); //删文章点赞记录
         dislikesMapper.deleteDislikeRecordByTextTypeAndTextId(1,articleId); //删文章点踩记录

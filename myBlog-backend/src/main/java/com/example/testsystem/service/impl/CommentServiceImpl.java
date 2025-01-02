@@ -1,10 +1,7 @@
 package com.example.testsystem.service.impl;
 
 import com.example.testsystem.Util.ResponseMessage;
-import com.example.testsystem.mapper.ArticleMapper;
-import com.example.testsystem.mapper.CommentMapper;
-import com.example.testsystem.mapper.HitsMapper;
-import com.example.testsystem.mapper.TokenMapper;
+import com.example.testsystem.mapper.*;
 import com.example.testsystem.model.Comment;
 import com.example.testsystem.model.Token;
 import com.example.testsystem.model.toback.CommentToBack;
@@ -25,6 +22,8 @@ public class CommentServiceImpl implements CommentService {
     HitsMapper hitsMapper;
     @Autowired
     ArticleRedis articleRedis;
+    @Autowired
+    TipoffMapper tipoffMapper;
     @Override
     public ResponseMessage<String> launchComment(CommentToBack commentToBack) {
         //先获取发评论人的id
@@ -45,6 +44,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ResponseMessage<String> deleteComment(int commentId) {
         Comment tempComment = commentMapper.getCommentByCommentId(commentId);
+
+        tipoffMapper.deleteTipoff(2,commentId);
 
         //修bug（点击量+1的bug）
         articleMapper.reduceHit(tempComment.getArticleId());
